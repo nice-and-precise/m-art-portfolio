@@ -20,15 +20,24 @@
     "prepare": "husky install || true"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.22.0",
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.8.0",
+    "clsx": "^2.1.0",
+    "date-fns": "^4.1.0",
+    "formidable": "^3.5.4",
+    "jose": "^6.1.0",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "clsx": "^2.1.0"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.0",
     "@testing-library/react": "^14.2.0",
     "@testing-library/user-event": "^14.5.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/formidable": "^3.4.6",
     "@types/jest": "^29.5.0",
     "@types/node": "^20.11.0",
     "@types/react": "^18.3.0",
