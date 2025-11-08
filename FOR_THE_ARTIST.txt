@@ -1,0 +1,85 @@
+🎨 M_ART CERAMICS PORTFOLIO - YOUR NEW WEBSITE! 🎨
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+YOUR WEBSITE IS LIVE:
+https://m-art-portfolio.vercel.app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 UPLOAD POTTERY PHOTOS FROM YOUR PHONE:
+
+1. Open this link on your phone:
+   https://m-art-portfolio.vercel.app/admin/login
+
+2. Enter password: admin123
+
+3. Click "+ New Piece"
+
+4. Select a photo from your camera or gallery
+
+5. Fill in:
+   • Title (give your piece a name)
+   • Description (optional - what inspired it?)
+   • Collection (Vases, Bowls, Sculptural, etc.)
+   • Check "Featured" to show it on the homepage
+
+6. Tap "Upload" - Done! It's live instantly! ✨
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🖼️ VIEW YOUR GALLERY:
+https://m-art-portfolio.vercel.app/gallery
+
+🏠 YOUR HOMEPAGE:
+https://m-art-portfolio.vercel.app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS:
+
+• Take photos in good lighting
+• Show your pieces from different angles
+• Upload multiple photos per piece (coming soon!)
+• Use the filters to organize by collection
+• Mark your best pieces as "Featured"
+• Share the gallery link with friends & family
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎨 THE SITE FEATURES:
+
+✓ Beautiful gallery to showcase your ceramics
+✓ Easy mobile upload (perfect for phone photos)
+✓ Collections to organize your work
+✓ Featured section on homepage for your best pieces
+✓ Professional design with earthy pottery colors
+✓ Fast loading on all devices
+✓ Automatic image optimization
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔒 IMPORTANT:
+
+Your admin password is: admin123
+
+Please change it after your first login!
+(We can help you do this)
+
+Keep this password private - it's the only way to
+upload and manage your pottery pieces.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📧 QUESTIONS?
+
+Just ask! The site is yours to use however you like.
+You can upload as many pieces as you want!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎁 This is your space to share your art with the world!
+
+Enjoy! 🎨✨
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

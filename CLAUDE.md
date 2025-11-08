@@ -6,10 +6,11 @@
 Beautiful, mobile-first portfolio for an 18-year-old ceramic artist to showcase pottery and upload new work from her phone. Surprise gift project.
 
 ## Current State
-**Status**: ✅ Build complete, ready to deploy
+**Status**: 🟢 LIVE AND DEPLOYED
+**Live URL**: https://m-art-portfolio.vercel.app
 **Stack**: Next.js 14, TypeScript, Tailwind, Cloudinary, Vercel
-**Deployment**: Ready for https://vercel.com/jordans-projects-4bff4baa
-**Build**: Production build passing (12 routes generated)
+**Deployment**: https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio
+**GitHub**: https://github.com/nice-and-precise/m-art-portfolio
 
 ## Architecture
 
@@ -132,22 +133,27 @@ After every significant change, update:
 - Mobile-first (artist is primary user)
 - Fast (static generation where possible)
 
-## Completed Features
-- ✅ Landing page with Hero, Featured Gallery, About sections
-- ✅ Gallery page with masonry grid, filtering, sorting, lightbox
-- ✅ Admin login page with password authentication
-- ✅ Admin dashboard with upload and delete functionality
-- ✅ API routes for auth, CRUD operations, image upload
-- ✅ Cloudinary integration for image optimization
-- ✅ Pottery color palette (clay/glaze colors)
-- ✅ Placeholder data with 6 sample pieces
-- ✅ Production build successful
+## Production URLs
+- **Live Site**: https://m-art-portfolio.vercel.app
+- **Admin Login**: https://m-art-portfolio.vercel.app/admin/login (password: admin123)
+- **Gallery**: https://m-art-portfolio.vercel.app/gallery
+- **Vercel Dashboard**: https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio
+- **GitHub**: https://github.com/nice-and-precise/m-art-portfolio
 
-## Next Steps
-1. Deploy to Vercel: `vercel login` then `vercel --prod`
-2. Set environment variables in Vercel dashboard
-3. Test admin upload with real photos
-4. Optional: Add custom domain
+## Making Changes
+```bash
+# Edit code in C:\Users\Owner\Desktop\M_ART
+git add -A
+git commit -m "describe changes"
+git push
+# Vercel auto-deploys in 2-3 minutes
+```
+
+## Quick Reference
+- **Admin Password**: admin123 (change after first use)
+- **Sample Data**: 6 placeholder pieces (delete via dashboard)
+- **Auto-Deploy**: Enabled (push to GitHub → Vercel deploys)
+- **Cloudinary**: dfrzq3gvh (auto image optimization)
 
 ---
 
