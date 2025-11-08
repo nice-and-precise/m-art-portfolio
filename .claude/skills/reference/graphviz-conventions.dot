@@ -1,0 +1,142 @@
+// Graphviz Conventions for Skills Documentation
+// Referenced by: .claude/skills/creating-skills/SKILL.md
+
+// ====================
+// WHEN TO USE FLOWCHARTS
+// ====================
+
+// Use flowcharts ONLY for:
+// - Non-obvious decision points
+// - Process loops where you might stop too early
+// - "When to use A vs B" decisions
+
+// NEVER use flowcharts for:
+// - Reference material → Use tables, lists instead
+// - Code examples → Use markdown code blocks
+// - Linear instructions → Use numbered lists
+// - Labels without semantic meaning (step1, helper2)
+
+// ====================
+// STYLE CONVENTIONS
+// ====================
+
+digraph example_conventions {
+    // Always specify graph direction
+    rankdir=TB;  // TB = Top to Bottom, LR = Left to Right
+
+    // Node shapes
+    "Decision Point" [shape=diamond];      // For yes/no decisions
+    "Action Step" [shape=box];             // For actions to take
+    "Start/End" [shape=ellipse];           // For start/end points
+
+    // Use semantic labels, not generic ones
+    "Check if file exists?" [shape=diamond];  // ✅ GOOD
+    // "step1" [shape=diamond];               // ❌ BAD
+
+    // Edge labels should be meaningful
+    "Check if file exists?" -> "Read file" [label="yes"];
+    "Check if file exists?" -> "Create file" [label="no"];
+
+    // Don't put code in flowcharts - it's not copy-pasteable
+    // "import fs" [shape=box];               // ❌ BAD
+    // "Read configuration" [shape=box];      // ✅ GOOD
+}
+
+// ====================
+// COMMON PATTERNS
+// ====================
+
+// Pattern 1: Simple decision flow
+digraph simple_decision {
+    rankdir=TB;
+
+    "Need authentication?" [shape=diamond];
+    "Use OAuth flow" [shape=box];
+    "Use public endpoint" [shape=box];
+
+    "Need authentication?" -> "Use OAuth flow" [label="yes"];
+    "Need authentication?" -> "Use public endpoint" [label="no"];
+}
+
+// Pattern 2: Loop with exit condition
+digraph loop_pattern {
+    rankdir=TB;
+
+    "Start" [shape=ellipse];
+    "Process item" [shape=box];
+    "More items?" [shape=diamond];
+    "Done" [shape=ellipse];
+
+    "Start" -> "Process item";
+    "Process item" -> "More items?";
+    "More items?" -> "Process item" [label="yes"];
+    "More items?" -> "Done" [label="no"];
+}
+
+// Pattern 3: Multiple decision points
+digraph multiple_decisions {
+    rankdir=TB;
+
+    "File exists?" [shape=diamond];
+    "File readable?" [shape=diamond];
+    "Read file" [shape=box];
+    "Create file" [shape=box];
+    "Error: Permission denied" [shape=box];
+
+    "File exists?" -> "File readable?" [label="yes"];
+    "File exists?" -> "Create file" [label="no"];
+    "File readable?" -> "Read file" [label="yes"];
+    "File readable?" -> "Error: Permission denied" [label="no"];
+}
+
+// ====================
+// ANTI-PATTERNS TO AVOID
+// ====================
+
+// ❌ Don't do this: Code in nodes
+digraph bad_code_in_nodes {
+    "const fs = require('fs')" [shape=box];
+    "fs.readFile('data.txt')" [shape=box];
+    // This is not copy-pasteable and hard to read
+}
+
+// ❌ Don't do this: Generic labels
+digraph bad_generic_labels {
+    step1 [shape=box];
+    step2 [shape=box];
+    step3 [shape=box];
+    // Labels should describe WHAT, not just sequence
+}
+
+// ❌ Don't do this: Complex flowchart for linear steps
+digraph bad_linear_as_flowchart {
+    "Install dependencies" [shape=box];
+    "Run build" [shape=box];
+    "Run tests" [shape=box];
+
+    "Install dependencies" -> "Run build";
+    "Run build" -> "Run tests";
+    // Use numbered list instead for linear processes
+}
+
+// ✅ Better: Use markdown for linear steps
+// 1. Install dependencies: `npm install`
+// 2. Run build: `npm run build`
+// 3. Run tests: `npm test`
+
+// ====================
+// SIZING GUIDELINES
+// ====================
+
+// Keep flowcharts SMALL:
+// - Maximum 7-10 nodes
+// - Maximum 2-3 decision points
+// - If larger, break into multiple flowcharts or use different format
+
+// ====================
+// ACCESSIBILITY
+// ====================
+
+// Always provide text description alongside flowchart:
+// "This flowchart shows the decision process for choosing an authentication method.
+//  If the endpoint requires authentication, use OAuth flow. Otherwise, use the public endpoint."

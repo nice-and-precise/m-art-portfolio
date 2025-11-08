@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run test*)",
+      "Bash(npm run build)",
+      "Bash(npm run dev)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./**/*.key)",
+      "Read(./**/*.pem)",
+      "Read(./**/*credentials*)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Edit(./secrets/**)",
+      "Bash(curl*)",
+      "Bash(wget*)",
+      "Bash(rm -rf*)",
+      "Bash(*--force*)"
+    ]
+  },
+  "companyAnnouncements": [
+    "M_ART is an art portfolio and gallery website",
+    "Always read CLAUDE.md files for project context",
+    "Update documentation atomically with code changes",
+    "Use plan mode for architectural changes",
+    "Follow the project's established patterns",
+    "Optimize images for web performance"
+  ],
+  "additionalInstructions": [
+    "When implementing features, create a CLAUDE.md in the feature directory",
+    "Keep documentation concise and focused on what's essential",
+    "Use @-mentions to provide specific file context",
+    "Always update CLAUDE.md after significant changes",
+    "Consider image optimization and gallery performance",
+    "Ensure responsive design for all screen sizes"
+  ]
+}

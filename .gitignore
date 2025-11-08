@@ -1,0 +1,69 @@
+# Claude Code - Personal/Local Files
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# Secrets & Credentials
+secrets/
+*.key
+*.pem
+*credentials*
+*.secret
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+/.next/
+/out/
+.next
+
+# Build Output
+dist/
+build/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output
+.jest_cache/
+
+# IDE & Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary Files
+*.tmp
+*.temp
+.cache/
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
