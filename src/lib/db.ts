@@ -1,15 +1,17 @@
 // Vercel Postgres database utilities
-// Last updated: 2025-11-09 - Migrated from JSON file storage to Supabase Postgres
-// Fixed: Add workaround parameter for Supabase .pooler. format compatibility
+// Last updated: 2025-11-09 - Migrated to native `pg` library for Supabase compatibility
+// Previous @vercel/postgres had validation bugs with Supabase .pooler. format
 
-import { createPool } from '@vercel/postgres';
+import { Pool } from 'pg';
 import type { PotteryPiece, Collection } from '@/types/pottery';
 
-// Workaround for @vercel/postgres Supabase compatibility issue
-// @vercel/postgres expects "-pooler." but Supabase uses ".pooler."
-// Adding workaround parameter tricks the validation check
-const pool = createPool({
-  connectionString: process.env.POSTGRES_URL + '&workaround=supabase-pooler.vercel',
+// Create connection pool using native PostgreSQL driver
+// Works with any Postgres provider (Supabase, Vercel, etc.)
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+  ssl: {
+    rejectUnauthorized: false, // Required for Supabase connections
+  },
 });
 
 /**
@@ -17,7 +19,7 @@ const pool = createPool({
  */
 export async function getAllPieces(): Promise<PotteryPiece[]> {
   try {
-    const result = await pool.sql<PotteryPiece>`
+    const result = await pool.query<PotteryPiece>(`
       SELECT
         id,
         title,
@@ -29,7 +31,7 @@ export async function getAllPieces(): Promise<PotteryPiece[]> {
         updated_at as "updatedAt"
       FROM pottery_pieces
       ORDER BY created_at DESC
-    `;
+    `);
     return result.rows;
   } catch (error) {
     console.error('Database error in getAllPieces:', error);
@@ -42,7 +44,7 @@ export async function getAllPieces(): Promise<PotteryPiece[]> {
  */
 export async function getPieceById(id: string): Promise<PotteryPiece | null> {
   try {
-    const result = await pool.sql<PotteryPiece>`
+    const result = await pool.query<PotteryPiece>(`
       SELECT
         id,
         title,
@@ -53,8 +55,8 @@ export async function getPieceById(id: string): Promise<PotteryPiece | null> {
         created_at as "createdAt",
         updated_at as "updatedAt"
       FROM pottery_pieces
-      WHERE id = ${id}
-    `;
+      WHERE id = $1
+    `, [id]);
     return result.rows[0] || null;
   } catch (error) {
     console.error(`Database error in getPieceById(${id}):`, error);
@@ -67,7 +69,7 @@ export async function getPieceById(id: string): Promise<PotteryPiece | null> {
  */
 export async function getPiecesByCollection(collection: Collection): Promise<PotteryPiece[]> {
   try {
-    const result = await pool.sql<PotteryPiece>`
+    const result = await pool.query<PotteryPiece>(`
       SELECT
         id,
         title,
@@ -78,9 +80,9 @@ export async function getPiecesByCollection(collection: Collection): Promise<Pot
         created_at as "createdAt",
         updated_at as "updatedAt"
       FROM pottery_pieces
-      WHERE collection = ${collection}
+      WHERE collection = $1
       ORDER BY created_at DESC
-    `;
+    `, [collection]);
     return result.rows;
   } catch (error) {
     console.error(`Database error in getPiecesByCollection(${collection}):`, error);
@@ -93,7 +95,7 @@ export async function getPiecesByCollection(collection: Collection): Promise<Pot
  */
 export async function getFeaturedPieces(): Promise<PotteryPiece[]> {
   try {
-    const result = await pool.sql<PotteryPiece>`
+    const result = await pool.query<PotteryPiece>(`
       SELECT
         id,
         title,
@@ -106,7 +108,7 @@ export async function getFeaturedPieces(): Promise<PotteryPiece[]> {
       FROM pottery_pieces
       WHERE featured = TRUE
       ORDER BY created_at DESC
-    `;
+    `);
     return result.rows;
   } catch (error) {
     console.error('Database error in getFeaturedPieces:', error);
@@ -122,20 +124,11 @@ export async function createPiece(piece: Omit<PotteryPiece, 'id' | 'createdAt' |
     const id = generateId();
     const now = new Date().toISOString();
 
-    const result = await pool.sql<PotteryPiece>`
+    const result = await pool.query<PotteryPiece>(`
       INSERT INTO pottery_pieces (
         id, title, description, collection, images, featured, created_at, updated_at
       )
-      VALUES (
-        ${id},
-        ${piece.title},
-        ${piece.description || null},
-        ${piece.collection},
-        ${JSON.stringify(piece.images)}::jsonb,
-        ${piece.featured},
-        ${now},
-        ${now}
-      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING
         id,
         title,
@@ -145,7 +138,16 @@ export async function createPiece(piece: Omit<PotteryPiece, 'id' | 'createdAt' |
         featured,
         created_at as "createdAt",
         updated_at as "updatedAt"
-    `;
+    `, [
+      id,
+      piece.title,
+      piece.description || null,
+      piece.collection,
+      JSON.stringify(piece.images),
+      piece.featured,
+      now,
+      now
+    ]);
 
     return result.rows[0];
   } catch (error) {
@@ -199,11 +201,9 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
       return await getPieceById(id);
     }
 
-    // Build the UPDATE query manually since @vercel/postgres doesn't support sql.raw()
-    const setClause = fields.join(', ');
     const query = `
       UPDATE pottery_pieces
-      SET ${setClause}
+      SET ${fields.join(', ')}
       WHERE id = $${paramIndex}
       RETURNING
         id,
@@ -229,10 +229,10 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
  */
 export async function deletePiece(id: string): Promise<boolean> {
   try {
-    const result = await pool.sql`
+    const result = await pool.query(`
       DELETE FROM pottery_pieces
-      WHERE id = ${id}
-    `;
+      WHERE id = $1
+    `, [id]);
 
     return (result.rowCount ?? 0) > 0;
   } catch (error) {
