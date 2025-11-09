@@ -18,10 +18,17 @@ test.describe('Admin Login', () => {
 
     // Enter wrong password
     await page.locator('input[type="password"]').fill('wrongpassword');
-    await page.getByRole('button', { name: /Login/i }).click();
 
-    // Should show error
-    await expect(page.getByText(/Invalid password|Login failed/i)).toBeVisible();
+    // Wait for API call to complete
+    const responsePromise = page.waitForResponse(response =>
+      response.url().includes('/api/auth/login') && response.status() === 401
+    );
+
+    await page.getByRole('button', { name: /Login/i }).click();
+    await responsePromise;
+
+    // Should show error in red box
+    await expect(page.locator('.bg-red-50')).toBeVisible({ timeout: 5000 });
   });
 
   test('should login with correct password', async ({ page }) => {

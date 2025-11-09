@@ -39,9 +39,9 @@ test.describe('Homepage', () => {
     await expect(page.getByText(/About the Artist/i)).toBeVisible();
     await expect(page.getByText(/Handcrafted with Passion/i)).toBeVisible();
 
-    // Specialties
+    // Specialties - use role to be more specific
     await expect(page.getByText(/Specialties/i)).toBeVisible();
-    await expect(page.getByText(/Functional Pottery/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Functional Pottery/i })).toBeVisible();
   });
 
   test('should have working CTAs', async ({ page }) => {
