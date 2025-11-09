@@ -1,16 +1,16 @@
 {
   "pieces": [
     {
-      "id": "1-sample-vase",
-      "title": "Terracotta Vase",
-      "description": "Hand-thrown terracotta vase with natural glaze",
+      "id": "1-elegant-vase",
+      "title": "Elegant Terracotta Vase",
+      "description": "Hand-thrown terracotta vase with natural earth tones and organic form",
       "collection": "Vases",
       "images": [
         {
-          "url": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800",
+          "url": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=1200&q=80",
           "publicId": "sample-1",
-          "width": 800,
-          "height": 1200
+          "width": 1200,
+          "height": 1800
         }
       ],
       "featured": true,
@@ -18,16 +18,16 @@
       "updatedAt": "2024-11-01T12:00:00Z"
     },
     {
-      "id": "2-sample-bowl",
-      "title": "Ceramic Bowl",
-      "description": "Handcrafted ceramic bowl with blue glaze",
+      "id": "2-celadon-bowl",
+      "title": "Celadon Glazed Bowl",
+      "description": "Handcrafted ceramic bowl with traditional celadon glaze finish",
       "collection": "Bowls",
       "images": [
         {
-          "url": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800",
+          "url": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=1200&q=80",
           "publicId": "sample-2",
-          "width": 800,
-          "height": 800
+          "width": 1200,
+          "height": 1200
         }
       ],
       "featured": true,
@@ -35,16 +35,16 @@
       "updatedAt": "2024-11-02T12:00:00Z"
     },
     {
-      "id": "3-sample-sculpture",
-      "title": "Abstract Form",
-      "description": "Sculptural ceramic piece",
+      "id": "3-organic-sculpture",
+      "title": "Organic Form Sculpture",
+      "description": "Contemporary sculptural piece exploring fluid ceramic forms",
       "collection": "Sculptural",
       "images": [
         {
-          "url": "https://images.unsplash.com/photo-1610878722345-79c5eaf6a48c?w=800",
+          "url": "https://images.unsplash.com/photo-1493106819501-66d381c466f1?w=1200&q=80",
           "publicId": "sample-3",
-          "width": 800,
-          "height": 1000
+          "width": 1200,
+          "height": 1600
         }
       ],
       "featured": true,
@@ -52,16 +52,16 @@
       "updatedAt": "2024-11-03T12:00:00Z"
     },
     {
-      "id": "4-functional-mug",
-      "title": "Handmade Mug",
-      "description": "Perfect for morning coffee",
+      "id": "4-artisan-mug",
+      "title": "Artisan Coffee Mug",
+      "description": "Hand-thrown stoneware mug with comfortable handle and rustic glaze",
       "collection": "Functional",
       "images": [
         {
-          "url": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800",
+          "url": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=1200&q=80",
           "publicId": "sample-4",
-          "width": 800,
-          "height": 800
+          "width": 1200,
+          "height": 1200
         }
       ],
       "featured": false,
@@ -69,16 +69,16 @@
       "updatedAt": "2024-11-04T12:00:00Z"
     },
     {
-      "id": "5-decorative-plate",
-      "title": "Decorative Plate",
-      "description": "Hand-painted ceramic plate",
+      "id": "5-minimalist-vessels",
+      "title": "Minimalist Vessel Collection",
+      "description": "Clean lines and matte glazes in neutral earth tones",
       "collection": "Decorative",
       "images": [
         {
-          "url": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800",
+          "url": "https://images.unsplash.com/photo-1603904336647-f7c41c7bfa39?w=1200&q=80",
           "publicId": "sample-5",
-          "width": 800,
-          "height": 600
+          "width": 1200,
+          "height": 1600
         }
       ],
       "featured": true,
@@ -86,21 +86,55 @@
       "updatedAt": "2024-11-05T12:00:00Z"
     },
     {
-      "id": "6-experimental-vessel",
-      "title": "Experimental Vessel",
-      "description": "Exploring new forms and textures",
-      "collection": "Experimental",
+      "id": "6-textured-vase",
+      "title": "Textured Ceramic Vase",
+      "description": "Exploring surface texture and form with contemporary glazing techniques",
+      "collection": "Vases",
       "images": [
         {
-          "url": "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800",
+          "url": "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=1200&q=80",
           "publicId": "sample-6",
-          "width": 800,
-          "height": 1000
+          "width": 1200,
+          "height": 1500
         }
       ],
       "featured": true,
       "createdAt": "2024-11-06T12:00:00Z",
       "updatedAt": "2024-11-06T12:00:00Z"
+    },
+    {
+      "id": "7-raku-bowl",
+      "title": "Raku Fired Bowl",
+      "description": "Traditional raku firing technique creating unique crackle patterns",
+      "collection": "Bowls",
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1610878722345-79c5eaf6a48c?w=1200&q=80",
+          "publicId": "sample-7",
+          "width": 1200,
+          "height": 1500
+        }
+      ],
+      "featured": true,
+      "createdAt": "2024-11-07T12:00:00Z",
+      "updatedAt": "2024-11-07T12:00:00Z"
+    },
+    {
+      "id": "8-abstract-form",
+      "title": "Abstract Ceramic Form",
+      "description": "Experimental piece pushing boundaries of traditional pottery",
+      "collection": "Experimental",
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?w=1200&q=80",
+          "publicId": "sample-8",
+          "width": 1200,
+          "height": 1800
+        }
+      ],
+      "featured": false,
+      "createdAt": "2024-11-08T12:00:00Z",
+      "updatedAt": "2024-11-08T12:00:00Z"
     }
   ]
 }

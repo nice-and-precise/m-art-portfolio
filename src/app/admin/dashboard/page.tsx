@@ -119,9 +119,11 @@ export default function AdminDashboard() {
                   type="file"
                   name="image"
                   accept="image/*"
+                  capture="environment"
                   required
-                  className="w-full px-4 py-2 border border-clay-300 rounded-lg"
+                  className="w-full px-4 py-3 border-2 border-clay-300 rounded-lg text-base focus:border-clay-500 focus:ring-2 focus:ring-clay-200"
                 />
+                <p className="text-xs text-clay-500 mt-1">Take a photo or choose from gallery</p>
               </div>
 
               <div>
@@ -130,16 +132,18 @@ export default function AdminDashboard() {
                   type="text"
                   name="title"
                   required
-                  className="w-full px-4 py-2 border border-clay-300 rounded-lg"
+                  placeholder="e.g., Blue Ceramic Vase"
+                  className="w-full px-4 py-3 border-2 border-clay-300 rounded-lg text-base focus:border-clay-500 focus:ring-2 focus:ring-clay-200"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-clay-700 mb-2">Description</label>
+                <label className="block text-sm font-medium text-clay-700 mb-2">Description (Optional)</label>
                 <textarea
                   name="description"
                   rows={3}
-                  className="w-full px-4 py-2 border border-clay-300 rounded-lg"
+                  placeholder="Tell us about this piece..."
+                  className="w-full px-4 py-3 border-2 border-clay-300 rounded-lg text-base focus:border-clay-500 focus:ring-2 focus:ring-clay-200"
                 />
               </div>
 
@@ -148,7 +152,7 @@ export default function AdminDashboard() {
                 <select
                   name="collection"
                   required
-                  className="w-full px-4 py-2 border border-clay-300 rounded-lg"
+                  className="w-full px-4 py-3 border-2 border-clay-300 rounded-lg text-base focus:border-clay-500 focus:ring-2 focus:ring-clay-200 bg-white"
                 >
                   <option value="Vases">Vases</option>
                   <option value="Bowls">Bowls</option>
@@ -159,24 +163,24 @@ export default function AdminDashboard() {
                 </select>
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center py-2">
                 <input
                   type="checkbox"
                   name="featured"
                   id="featured"
-                  className="mr-2"
+                  className="w-5 h-5 mr-3 text-clay-500 border-clay-300 rounded focus:ring-clay-500"
                 />
-                <label htmlFor="featured" className="text-sm text-clay-700">
-                  Featured piece
+                <label htmlFor="featured" className="text-base text-clay-700 cursor-pointer">
+                  Featured piece (show on homepage)
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={uploading}
-                className="w-full bg-clay-500 hover:bg-clay-600 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+                className="w-full bg-clay-500 hover:bg-clay-600 text-white py-4 rounded-lg font-medium text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
               >
-                {uploading ? 'Uploading...' : 'Upload'}
+                {uploading ? '⏳ Uploading...' : '📤 Upload Piece'}
               </button>
             </form>
           </div>
