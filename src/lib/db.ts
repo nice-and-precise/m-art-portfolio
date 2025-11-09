@@ -1,13 +1,15 @@
 // Vercel Postgres database utilities
 // Last updated: 2025-11-09 - Migrated from JSON file storage to Supabase Postgres
-// Fixed: Use createPool for Supabase compatibility (Supabase uses .pooler. format, not -pooler.)
+// Fixed: Add workaround parameter for Supabase .pooler. format compatibility
 
 import { createPool } from '@vercel/postgres';
 import type { PotteryPiece, Collection } from '@/types/pottery';
 
-// Create pool with explicit connection string for Supabase compatibility
+// Workaround for @vercel/postgres Supabase compatibility issue
+// @vercel/postgres expects "-pooler." but Supabase uses ".pooler."
+// Adding workaround parameter tricks the validation check
 const pool = createPool({
-  connectionString: process.env.POSTGRES_URL,
+  connectionString: process.env.POSTGRES_URL + '&workaround=supabase-pooler.vercel',
 });
 
 /**
