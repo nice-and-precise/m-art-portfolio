@@ -1,38 +1,40 @@
-// Vercel Postgres database utilities
-// Last updated: 2025-11-09 - Migrated to native `pg` library for Supabase compatibility
-// Previous @vercel/postgres had validation bugs with Supabase .pooler. format
+// Supabase database utilities
+// Last updated: 2025-11-09 - Migrated to Supabase JS client (REST API)
+// Fix #4: Use Supabase's REST API designed for serverless (after 3 failed direct Postgres attempts)
 
-import { Pool } from 'pg';
+import { createClient } from '@supabase/supabase-js';
 import type { PotteryPiece, Collection } from '@/types/pottery';
 
-// Create connection pool using native PostgreSQL driver
-// Works with any Postgres provider (Supabase, Vercel, etc.)
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: {
-    rejectUnauthorized: false, // Required for Supabase connections
-  },
-});
+// Create Supabase client using service role key for server-side operations
+// Service role bypasses RLS (Row Level Security) for admin operations
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+);
 
 /**
  * Read all pottery pieces
  */
 export async function getAllPieces(): Promise<PotteryPiece[]> {
   try {
-    const result = await pool.query<PotteryPiece>(`
-      SELECT
-        id,
-        title,
-        description,
-        collection,
-        images,
-        featured,
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      FROM pottery_pieces
-      ORDER BY created_at DESC
-    `);
-    return result.rows;
+    const { data, error } = await supabase
+      .from('pottery_pieces')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error in getAllPieces:', error);
+      throw new Error('Failed to fetch pottery pieces from database');
+    }
+
+    // Transform snake_case to camelCase for TypeScript
+    return (data || []).map(transformDbToPotteryPiece);
   } catch (error) {
     console.error('Database error in getAllPieces:', error);
     throw new Error('Failed to fetch pottery pieces from database');
@@ -44,20 +46,22 @@ export async function getAllPieces(): Promise<PotteryPiece[]> {
  */
 export async function getPieceById(id: string): Promise<PotteryPiece | null> {
   try {
-    const result = await pool.query<PotteryPiece>(`
-      SELECT
-        id,
-        title,
-        description,
-        collection,
-        images,
-        featured,
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      FROM pottery_pieces
-      WHERE id = $1
-    `, [id]);
-    return result.rows[0] || null;
+    const { data, error } = await supabase
+      .from('pottery_pieces')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // Not found
+        return null;
+      }
+      console.error(`Supabase error in getPieceById(${id}):`, error);
+      return null;
+    }
+
+    return transformDbToPotteryPiece(data);
   } catch (error) {
     console.error(`Database error in getPieceById(${id}):`, error);
     return null;
@@ -69,21 +73,18 @@ export async function getPieceById(id: string): Promise<PotteryPiece | null> {
  */
 export async function getPiecesByCollection(collection: Collection): Promise<PotteryPiece[]> {
   try {
-    const result = await pool.query<PotteryPiece>(`
-      SELECT
-        id,
-        title,
-        description,
-        collection,
-        images,
-        featured,
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      FROM pottery_pieces
-      WHERE collection = $1
-      ORDER BY created_at DESC
-    `, [collection]);
-    return result.rows;
+    const { data, error } = await supabase
+      .from('pottery_pieces')
+      .select('*')
+      .eq('collection', collection)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error(`Supabase error in getPiecesByCollection(${collection}):`, error);
+      return [];
+    }
+
+    return (data || []).map(transformDbToPotteryPiece);
   } catch (error) {
     console.error(`Database error in getPiecesByCollection(${collection}):`, error);
     return [];
@@ -95,21 +96,18 @@ export async function getPiecesByCollection(collection: Collection): Promise<Pot
  */
 export async function getFeaturedPieces(): Promise<PotteryPiece[]> {
   try {
-    const result = await pool.query<PotteryPiece>(`
-      SELECT
-        id,
-        title,
-        description,
-        collection,
-        images,
-        featured,
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      FROM pottery_pieces
-      WHERE featured = TRUE
-      ORDER BY created_at DESC
-    `);
-    return result.rows;
+    const { data, error } = await supabase
+      .from('pottery_pieces')
+      .select('*')
+      .eq('featured', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error in getFeaturedPieces:', error);
+      return [];
+    }
+
+    return (data || []).map(transformDbToPotteryPiece);
   } catch (error) {
     console.error('Database error in getFeaturedPieces:', error);
     return [];
@@ -124,32 +122,27 @@ export async function createPiece(piece: Omit<PotteryPiece, 'id' | 'createdAt' |
     const id = generateId();
     const now = new Date().toISOString();
 
-    const result = await pool.query<PotteryPiece>(`
-      INSERT INTO pottery_pieces (
-        id, title, description, collection, images, featured, created_at, updated_at
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING
+    const { data, error } = await supabase
+      .from('pottery_pieces')
+      .insert({
         id,
-        title,
-        description,
-        collection,
-        images,
-        featured,
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-    `, [
-      id,
-      piece.title,
-      piece.description || null,
-      piece.collection,
-      JSON.stringify(piece.images),
-      piece.featured,
-      now,
-      now
-    ]);
+        title: piece.title,
+        description: piece.description || null,
+        collection: piece.collection,
+        images: piece.images,
+        featured: piece.featured,
+        created_at: now,
+        updated_at: now,
+      })
+      .select()
+      .single();
 
-    return result.rows[0];
+    if (error) {
+      console.error('Supabase error in createPiece:', error);
+      throw new Error('Failed to create pottery piece');
+    }
+
+    return transformDbToPotteryPiece(data);
   } catch (error) {
     console.error('Database error in createPiece:', error);
     throw new Error('Failed to create pottery piece');
@@ -163,61 +156,34 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
   try {
     const now = new Date().toISOString();
 
-    // Build dynamic update query based on provided fields
-    const fields: string[] = [];
-    const values: any[] = [];
-    let paramIndex = 1;
+    // Build update object, transforming camelCase to snake_case where needed
+    const updateData: any = {
+      updated_at: now,
+    };
 
-    if (updates.title !== undefined) {
-      fields.push(`title = $${paramIndex++}`);
-      values.push(updates.title);
-    }
-    if (updates.description !== undefined) {
-      fields.push(`description = $${paramIndex++}`);
-      values.push(updates.description);
-    }
-    if (updates.collection !== undefined) {
-      fields.push(`collection = $${paramIndex++}`);
-      values.push(updates.collection);
-    }
-    if (updates.images !== undefined) {
-      fields.push(`images = $${paramIndex++}::jsonb`);
-      values.push(JSON.stringify(updates.images));
-    }
-    if (updates.featured !== undefined) {
-      fields.push(`featured = $${paramIndex++}`);
-      values.push(updates.featured);
-    }
+    if (updates.title !== undefined) updateData.title = updates.title;
+    if (updates.description !== undefined) updateData.description = updates.description;
+    if (updates.collection !== undefined) updateData.collection = updates.collection;
+    if (updates.images !== undefined) updateData.images = updates.images;
+    if (updates.featured !== undefined) updateData.featured = updates.featured;
 
-    // Always update updated_at
-    fields.push(`updated_at = $${paramIndex++}`);
-    values.push(now);
+    const { data, error } = await supabase
+      .from('pottery_pieces')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
 
-    // Add id for WHERE clause
-    values.push(id);
-
-    if (fields.length === 1) {
-      // Only updated_at, nothing to update
-      return await getPieceById(id);
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // Not found
+        return null;
+      }
+      console.error(`Supabase error in updatePiece(${id}):`, error);
+      throw new Error('Failed to update pottery piece');
     }
 
-    const query = `
-      UPDATE pottery_pieces
-      SET ${fields.join(', ')}
-      WHERE id = $${paramIndex}
-      RETURNING
-        id,
-        title,
-        description,
-        collection,
-        images,
-        featured,
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-    `;
-
-    const result = await pool.query<PotteryPiece>(query, values);
-    return result.rows[0] || null;
+    return transformDbToPotteryPiece(data);
   } catch (error) {
     console.error(`Database error in updatePiece(${id}):`, error);
     throw new Error('Failed to update pottery piece');
@@ -229,16 +195,37 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
  */
 export async function deletePiece(id: string): Promise<boolean> {
   try {
-    const result = await pool.query(`
-      DELETE FROM pottery_pieces
-      WHERE id = $1
-    `, [id]);
+    const { error } = await supabase
+      .from('pottery_pieces')
+      .delete()
+      .eq('id', id);
 
-    return (result.rowCount ?? 0) > 0;
+    if (error) {
+      console.error(`Supabase error in deletePiece(${id}):`, error);
+      throw new Error('Failed to delete pottery piece');
+    }
+
+    return true;
   } catch (error) {
     console.error(`Database error in deletePiece(${id}):`, error);
     throw new Error('Failed to delete pottery piece');
   }
+}
+
+/**
+ * Transform database row to PotteryPiece type (snake_case → camelCase)
+ */
+function transformDbToPotteryPiece(row: any): PotteryPiece {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    collection: row.collection,
+    images: row.images,
+    featured: row.featured,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
 }
 
 /**
