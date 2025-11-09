@@ -4,6 +4,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { PotteryPiece, Collection } from '@/types/pottery';
+import type { ContactSubmission, CreateContactRequest } from '@/types/contact';
 
 // Create Supabase client using service role key for server-side operations
 // Service role bypasses RLS (Row Level Security) for admin operations
@@ -235,4 +236,85 @@ function generateId(): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 11);
   return `${timestamp}-${random}`;
+}
+
+// ============================================================================
+// CONTACT SUBMISSIONS
+// ============================================================================
+
+/**
+ * Create new contact submission
+ */
+export async function createContactSubmission(
+  submission: CreateContactRequest
+): Promise<ContactSubmission> {
+  try {
+    const id = generateId();
+    const now = new Date().toISOString();
+
+    const { data, error } = await supabase
+      .from('contact_submissions')
+      .insert({
+        id,
+        name: submission.name,
+        email: submission.email,
+        phone: submission.phone || null,
+        inquiry_type: submission.inquiryType,
+        message: submission.message,
+        status: 'new',
+        created_at: now,
+        updated_at: now,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase error in createContactSubmission:', error);
+      throw new Error('Failed to create contact submission');
+    }
+
+    return transformDbToContactSubmission(data);
+  } catch (error) {
+    console.error('Database error in createContactSubmission:', error);
+    throw new Error('Failed to create contact submission');
+  }
+}
+
+/**
+ * Get all contact submissions
+ */
+export async function getAllContactSubmissions(): Promise<ContactSubmission[]> {
+  try {
+    const { data, error } = await supabase
+      .from('contact_submissions')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error in getAllContactSubmissions:', error);
+      return [];
+    }
+
+    return (data || []).map(transformDbToContactSubmission);
+  } catch (error) {
+    console.error('Database error in getAllContactSubmissions:', error);
+    return [];
+  }
+}
+
+/**
+ * Transform database row to ContactSubmission type (snake_case → camelCase)
+ */
+function transformDbToContactSubmission(row: any): ContactSubmission {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    inquiryType: row.inquiry_type,
+    message: row.message,
+    status: row.status,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
 }

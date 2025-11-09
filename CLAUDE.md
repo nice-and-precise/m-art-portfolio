@@ -1,6 +1,6 @@
 # M_ART Ceramics Portfolio
 
-<!-- Last updated: 2025-11-09 - Supabase REST API migration successful (Fix #4) -->
+<!-- Last updated: 2025-11-09 - Contact form implemented with Supabase storage -->
 
 ## Purpose
 Professional, museum-quality portfolio for an 18-year-old ceramic artist. Mobile-first with phone camera upload. Inspired by best ceramics portfolios (Format, professional artist websites).
@@ -58,12 +58,19 @@ M_ART/
 │   └── api/
 │       └── requirements.md      # Backend routes
 ├── src/
-│   ├── app/                     # Next.js pages (App Router)
-│   ├── components/              # React components
-│   ├── lib/                     # Utilities (cloudinary, auth, db)
-│   └── types/                   # TypeScript types
-└── data/
-    └── pottery.json             # Pottery pieces storage
+│   ├── app/
+│   │   ├── contact/page.tsx     # Contact form page
+│   │   └── api/contact/route.ts # Contact submission endpoint
+│   ├── components/
+│   │   └── contact/ContactForm.tsx  # Contact form component
+│   ├── lib/
+│   │   └── db.ts                # Database utilities (pottery + contact)
+│   └── types/
+│       ├── pottery.ts           # Pottery types
+│       └── contact.ts           # Contact form types
+└── supabase/
+    └── migrations/
+        └── 002_create_contact_submissions.sql  # Contact table schema
 ```
 
 ## Active Features
@@ -89,6 +96,16 @@ M_ART/
 - Mark pieces as featured
 - Edit/delete existing pieces
 
+### Contact Form (/contact) ✅
+- Commission inquiry form with validation
+- Fields: name, email, phone (optional), inquiry type, message
+- Client-side validation (email format, required fields, min length)
+- Server-side validation in API route
+- Submissions stored in Supabase `contact_submissions` table
+- Professional UI matching pottery color palette
+- Success/error feedback messages
+- 5 inquiry types: Commission, Purchase, Collaboration, Exhibition, General
+
 ### API Routes
 - POST /api/auth/login - Admin authentication
 - GET /api/pieces - List all pottery
@@ -96,6 +113,7 @@ M_ART/
 - PUT /api/pieces/[id] - Update piece
 - DELETE /api/pieces/[id] - Delete piece
 - POST /api/upload - Upload image to Cloudinary
+- POST /api/contact - Submit contact form (stores in contact_submissions table)
 
 ## Environment Variables
 ```bash
