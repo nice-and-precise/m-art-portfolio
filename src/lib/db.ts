@@ -303,6 +303,64 @@ export async function getAllContactSubmissions(): Promise<ContactSubmission[]> {
 }
 
 /**
+ * Update contact submission status
+ */
+export async function updateContactSubmissionStatus(
+  id: string,
+  status: 'new' | 'read' | 'responded' | 'archived'
+): Promise<ContactSubmission | null> {
+  try {
+    const now = new Date().toISOString();
+
+    const { data, error } = await supabase
+      .from('contact_submissions')
+      .update({
+        status,
+        updated_at: now,
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // Not found
+        return null;
+      }
+      console.error(`Supabase error in updateContactSubmissionStatus(${id}):`, error);
+      throw new Error('Failed to update contact submission status');
+    }
+
+    return transformDbToContactSubmission(data);
+  } catch (error) {
+    console.error(`Database error in updateContactSubmissionStatus(${id}):`, error);
+    throw new Error('Failed to update contact submission status');
+  }
+}
+
+/**
+ * Delete contact submission
+ */
+export async function deleteContactSubmission(id: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('contact_submissions')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error(`Supabase error in deleteContactSubmission(${id}):`, error);
+      throw new Error('Failed to delete contact submission');
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`Database error in deleteContactSubmission(${id}):`, error);
+    throw new Error('Failed to delete contact submission');
+  }
+}
+
+/**
  * Transform database row to ContactSubmission type (snake_case → camelCase)
  */
 function transformDbToContactSubmission(row: any): ContactSubmission {

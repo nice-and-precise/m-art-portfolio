@@ -1,6 +1,6 @@
 # M_ART Ceramics Portfolio
 
-<!-- Last updated: 2025-11-09 - Contact form implemented with Supabase storage -->
+<!-- Last updated: 2025-11-09 - Contact form + Admin submissions viewer complete -->
 
 ## Purpose
 Professional, museum-quality portfolio for an 18-year-old ceramic artist. Mobile-first with phone camera upload. Inspired by best ceramics portfolios (Format, professional artist websites).
@@ -96,6 +96,15 @@ M_ART/
 - Mark pieces as featured
 - Edit/delete existing pieces
 
+### Contact Submissions Admin (/admin/submissions) ✅
+- View all contact form submissions
+- Filter by status: new, read, responded, archived
+- Statistics dashboard (count by status)
+- Two-panel layout: list + detail view
+- Update submission status with one click
+- Delete submissions
+- Display all submission details (name, email, phone, inquiry type, message, timestamps)
+
 ### Contact Form (/contact) ✅
 - Commission inquiry form with validation
 - Fields: name, email, phone (optional), inquiry type, message
@@ -107,13 +116,19 @@ M_ART/
 - 5 inquiry types: Commission, Purchase, Collaboration, Exhibition, General
 
 ### API Routes
+**Public:**
+- POST /api/contact - Submit contact form (stores in contact_submissions table)
+
+**Admin Only (requires authentication):**
 - POST /api/auth/login - Admin authentication
 - GET /api/pieces - List all pottery
 - POST /api/pieces - Create new piece
 - PUT /api/pieces/[id] - Update piece
 - DELETE /api/pieces/[id] - Delete piece
 - POST /api/upload - Upload image to Cloudinary
-- POST /api/contact - Submit contact form (stores in contact_submissions table)
+- GET /api/admin/submissions - Get all contact submissions
+- PATCH /api/admin/submissions/[id] - Update submission status
+- DELETE /api/admin/submissions/[id] - Delete submission
 
 ## Environment Variables
 ```bash
