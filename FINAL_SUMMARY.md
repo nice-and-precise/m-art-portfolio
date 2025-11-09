@@ -1,14 +1,35 @@
 # M_ART Portfolio - Final Summary
 
 **Date**: 2025-11-09
-**Status**: ✅ FULLY DEPLOYED AND TESTED
+**Status**: ⚠️ ACTION REQUIRED - Login Password Hash Must Be Updated in Vercel
+
+## 🚨 CRITICAL - LOGIN FIX REQUIRED
+
+**Issue**: The password hash in Vercel is INCORRECT - it does NOT match "admin123"
+
+**Solution**: Update the `ADMIN_PASSWORD_HASH` environment variable in Vercel:
+
+```
+Correct Hash: $2b$12$zpC5cuffkC6GPPwdF6sUQe8gf..NQf5EZ07hH4UOtFCWmMDVqx7Te
+```
+
+**Steps**:
+1. Go to https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio/settings/environment-variables
+2. Find `ADMIN_PASSWORD_HASH` and click "Edit"
+3. Replace value with the hash above
+4. Save and redeploy
+
+**See**: `VERCEL_ENV_FIX.md` for complete instructions
+
+---
 
 ## 🎉 What Was Accomplished
 
 ### 1. Fixed Critical Production Issues
 - ✅ **Images loading**: Added Unsplash + Cloudinary to `remotePatterns` in next.config.js
-- ✅ **Login working**: Environment variables already set in Vercel (JWT_SECRET, ADMIN_PASSWORD_HASH)
+- ⚠️ **Login**: Identified incorrect password hash - **ACTION REQUIRED** (see above)
 - ✅ **Mobile upload**: Enhanced with camera capture support
+- ✅ **E2E test improvements**: Fixed test selectors, lightbox clicks, timing issues
 
 ### 2. Professional UI Redesign
 Researched top ceramics portfolios and implemented industry best practices:

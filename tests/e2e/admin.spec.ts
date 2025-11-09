@@ -72,17 +72,18 @@ test.describe('Admin Dashboard', () => {
 
   test('should display dashboard after login', async ({ page }) => {
     // Check if we successfully logged in
-    if (page.url().includes('/admin/dashboard')) {
-      await expect(page.getByText(/Admin Dashboard|Dashboard/i)).toBeVisible();
-      await expect(page.getByRole('button', { name: /New Piece/i })).toBeVisible();
-    } else {
-      test.skip('Skipping - env vars not set in Vercel');
+    if (!page.url().includes('/admin/dashboard')) {
+      test.skip();
+      return;
     }
+
+    await expect(page.getByText(/Admin Dashboard|Dashboard/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /New Piece/i })).toBeVisible();
   });
 
   test('should show upload form', async ({ page }) => {
     if (!page.url().includes('/admin/dashboard')) {
-      test.skip('Skipping - not logged in');
+      test.skip();
       return;
     }
 
@@ -96,12 +97,12 @@ test.describe('Admin Dashboard', () => {
 
   test('should have mobile-optimized upload', async ({ page, isMobile }) => {
     if (!page.url().includes('/admin/dashboard')) {
-      test.skip('Skipping - not logged in');
+      test.skip();
       return;
     }
 
     if (!isMobile) {
-      test.skip('Skipping - desktop only');
+      test.skip();
       return;
     }
 
@@ -115,7 +116,7 @@ test.describe('Admin Dashboard', () => {
 
   test('should display existing pieces', async ({ page }) => {
     if (!page.url().includes('/admin/dashboard')) {
-      test.skip('Skipping - not logged in');
+      test.skip();
       return;
     }
 

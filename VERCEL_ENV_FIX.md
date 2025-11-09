@@ -15,11 +15,13 @@ CLOUDINARY_API_KEY=313578916364477
 CLOUDINARY_API_SECRET=ExrzMytQSER_i135n4MMCnD1O5w
 ```
 
-### 2. Authentication (MISSING - ADD THESE)
+### 2. Authentication (CRITICAL - UPDATE THESE)
 ```
-ADMIN_PASSWORD_HASH=$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LfKmQYqj6pZV6pVaG
+ADMIN_PASSWORD_HASH=$2b$12$zpC5cuffkC6GPPwdF6sUQe8gf..NQf5EZ07hH4UOtFCWmMDVqx7Te
 JWT_SECRET=mhluSGqZExegozKoRmkeF23D46jGfqcwNZpwx2euq/E=
 ```
+
+**IMPORTANT**: The password hash was INCORRECT. The hash above is verified to work with password "admin123".
 
 ### 3. Site Configuration (Optional)
 ```
@@ -49,7 +51,7 @@ NEXT_PUBLIC_ARTIST_NAME=M_ART
 # Copy these one by one into Vercel dashboard:
 
 Key: ADMIN_PASSWORD_HASH
-Value: $2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LfKmQYqj6pZV6pVaG
+Value: $2b$12$zpC5cuffkC6GPPwdF6sUQe8gf..NQf5EZ07hH4UOtFCWmMDVqx7Te
 
 Key: JWT_SECRET
 Value: mhluSGqZExegozKoRmkeF23D46jGfqcwNZpwx2euq/E=
@@ -79,7 +81,7 @@ cd C:\Users\Owner\Desktop\M_ART
 
 # Add environment variables
 vercel env add ADMIN_PASSWORD_HASH production
-# Paste: $2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LfKmQYqj6pZV6pVaG
+# Paste: $2b$12$zpC5cuffkC6GPPwdF6sUQe8gf..NQf5EZ07hH4UOtFCWmMDVqx7Te
 
 vercel env add JWT_SECRET production
 # Paste: mhluSGqZExegozKoRmkeF23D46jGfqcwNZpwx2euq/E=
