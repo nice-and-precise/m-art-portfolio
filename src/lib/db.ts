@@ -1,15 +1,21 @@
 // Vercel Postgres database utilities
-// Last updated: 2025-11-09 - Migrated from JSON file storage to Postgres
+// Last updated: 2025-11-09 - Migrated from JSON file storage to Supabase Postgres
+// Fixed: Use createPool for Supabase compatibility (Supabase uses .pooler. format, not -pooler.)
 
-import { sql } from '@vercel/postgres';
+import { createPool } from '@vercel/postgres';
 import type { PotteryPiece, Collection } from '@/types/pottery';
+
+// Create pool with explicit connection string for Supabase compatibility
+const pool = createPool({
+  connectionString: process.env.POSTGRES_URL,
+});
 
 /**
  * Read all pottery pieces
  */
 export async function getAllPieces(): Promise<PotteryPiece[]> {
   try {
-    const result = await sql<PotteryPiece>`
+    const result = await pool.sql<PotteryPiece>`
       SELECT
         id,
         title,
@@ -34,7 +40,7 @@ export async function getAllPieces(): Promise<PotteryPiece[]> {
  */
 export async function getPieceById(id: string): Promise<PotteryPiece | null> {
   try {
-    const result = await sql<PotteryPiece>`
+    const result = await pool.sql<PotteryPiece>`
       SELECT
         id,
         title,
@@ -59,7 +65,7 @@ export async function getPieceById(id: string): Promise<PotteryPiece | null> {
  */
 export async function getPiecesByCollection(collection: Collection): Promise<PotteryPiece[]> {
   try {
-    const result = await sql<PotteryPiece>`
+    const result = await pool.sql<PotteryPiece>`
       SELECT
         id,
         title,
@@ -85,7 +91,7 @@ export async function getPiecesByCollection(collection: Collection): Promise<Pot
  */
 export async function getFeaturedPieces(): Promise<PotteryPiece[]> {
   try {
-    const result = await sql<PotteryPiece>`
+    const result = await pool.sql<PotteryPiece>`
       SELECT
         id,
         title,
@@ -114,7 +120,7 @@ export async function createPiece(piece: Omit<PotteryPiece, 'id' | 'createdAt' |
     const id = generateId();
     const now = new Date().toISOString();
 
-    const result = await sql<PotteryPiece>`
+    const result = await pool.sql<PotteryPiece>`
       INSERT INTO pottery_pieces (
         id, title, description, collection, images, featured, created_at, updated_at
       )
@@ -208,7 +214,7 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
         updated_at as "updatedAt"
     `;
 
-    const result = await sql.query<PotteryPiece>(query, values);
+    const result = await pool.query<PotteryPiece>(query, values);
     return result.rows[0] || null;
   } catch (error) {
     console.error(`Database error in updatePiece(${id}):`, error);
@@ -221,7 +227,7 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
  */
 export async function deletePiece(id: string): Promise<boolean> {
   try {
-    const result = await sql`
+    const result = await pool.sql`
       DELETE FROM pottery_pieces
       WHERE id = ${id}
     `;
