@@ -78,23 +78,79 @@ const result = await pool.sql`SELECT * FROM pottery_pieces`;
 
 ## Next Steps (Per Systematic Debugging)
 
-### Option A: Try Fix #3 - Replace @vercel/postgres with native `pg` library
-**Rationale**: @vercel/postgres is designed for Vercel's Neon Postgres, not Supabase. Using native PostgreSQL driver should bypass validation issues.
+### Attempt #3: Replace with native `pg` library ✅ Implemented, ❌ FAILED
+**Hypothesis**: Library-agnostic approach using standard PostgreSQL driver.
 
 **Implementation**:
-1. Install: `npm install pg @types/pg`
-2. Replace src/lib/db.ts to use `pg.Pool` directly
-3. Test locally before deployment
+```typescript
+import { Pool } from 'pg';
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+  ssl: { rejectUnauthorized: false },
+});
+// Converted all queries to parameterized format ($1, $2, etc.)
+```
 
-**Risk**: Architectural change, but should be straightforward.
+**Result**: ❌ Still fails with same error
+**Commit**: `78c421f`
 
-### Option B: Question the Architecture (After 3+ Failed Fixes)
-Per systematic debugging guidelines: "If 3+ fixes failed: STOP and question fundamentals"
+## 🛑 SYSTEMATIC DEBUGGING CHECKPOINT
 
-**Questions to ask**:
-- Is @vercel/postgres the right choice for Supabase?
-- Should we use `@supabase/supabase-js` instead?
-- Is there a fundamental incompatibility we're missing?
+**Per guidelines**: After 3 failed fixes → STOP and question architecture
+
+### The Fundamental Problem
+
+**Pattern that emerged**:
+- ✅ `npx tsx scripts/verify-db.ts` → Works perfectly (uses @vercel/postgres)
+- ❌ Next.js with @vercel/postgres → Fails
+- ❌ Next.js with @vercel/postgres + createPool → Fails
+- ❌ Next.js with @vercel/postgres + workaround param → Fails
+- ❌ Next.js with native `pg` library → Fails
+
+**This is NOT a library issue. This is an architectural/environment issue.**
+
+### Architectural Questions (MUST DISCUSS WITH USER)
+
+1. **Environment Variable Propagation**:
+   - Why does `/api/debug` show correct `POSTGRES_URL` but connections fail?
+   - Is Vercel's serverless environment blocking the connection?
+   - Are there firewall/network rules preventing connections?
+
+2. **Supabase Configuration**:
+   - Is the Supabase instance configured to accept connections from Vercel?
+   - Are we using the correct connection mode (pooled vs direct)?
+   - Connection pooling requirements for serverless?
+
+3. **Next.js Serverless Context**:
+   - Is there something special about how Next.js API routes handle database connections?
+   - Cold start issues with connection pools?
+   - Timeout problems?
+
+4. **Alternative Approaches**:
+   - Should we use `@supabase/supabase-js` which has built-in Supabase optimizations?
+   - Use Supabase's REST API instead of direct Postgres connection?
+   - Different connection string format?
+
+### Immediate Next Steps (Requires User Decision)
+
+**Option A: Debug Environment/Network**
+- Add extensive logging to see WHERE the connection fails
+- Check Supabase dashboard for connection attempts
+- Verify Vercel can reach Supabase endpoints
+
+**Option B: Try Supabase Official Client**
+- Install `@supabase/supabase-js`
+- Use Supabase's REST API (not direct Postgres)
+- May be better optimized for serverless
+
+**Option C: Simplify for Investigation**
+- Create minimal reproduction (single API route, single query)
+- Test with different Supabase connection modes
+- Verify network connectivity from Vercel
+
+## Current Status: BLOCKED
+
+Cannot proceed without architectural decision. All standard approaches have failed. Need to investigate the fundamental connectivity issue between Vercel's serverless functions and Supabase Postgres.
 
 ## Recommendations
 
