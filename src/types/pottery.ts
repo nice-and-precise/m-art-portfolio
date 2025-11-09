@@ -19,7 +19,7 @@ export interface PotteryImage {
   height?: number;
 }
 
-export type Collection = 'Vases' | 'Bowls' | 'Sculptural' | 'Functional' | 'Decorative' | 'Experimental';
+export type Collection = 'Vases' | 'Bowls' | 'Sculptural' | 'Functional' | 'Decorative' | 'Experimental' | 'Portfolio';
 
 export const COLLECTIONS: Collection[] = [
   'Vases',
@@ -28,6 +28,7 @@ export const COLLECTIONS: Collection[] = [
   'Functional',
   'Decorative',
   'Experimental',
+  'Portfolio',
 ];
 
 // Admin types

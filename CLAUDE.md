@@ -1,6 +1,6 @@
 # M_ART Ceramics Portfolio
 
-<!-- Last updated: 2025-11-09 - Canva slides integrated into homepage hero and parallax -->
+<!-- Last updated: 2025-11-09 - All 10 Canva slides added to gallery database as Portfolio collection -->
 
 ## Purpose
 Professional, museum-quality portfolio for Molly Anne Damhof, an 18-year-old award-winning ceramic artist. Mobile-first with phone camera upload. Features her 3-year artistic journey from sophomore to senior year, achievements, and signature galaxy glaze collection.
@@ -14,8 +14,8 @@ Professional, museum-quality portfolio for Molly Anne Damhof, an 18-year-old awa
 **Artist**: Molly Anne Damhof
 **Contact**: mollydamhof@gmail.com | 515-230-2118
 **Design**: Professional ceramics portfolio with sage green accents
-**Database**: Supabase Postgres via REST API (8 pottery pieces loaded)
-**Portfolio Assets**: 10 Canva presentation slides uploaded to Cloudinary
+**Database**: Supabase Postgres via REST API (10 Portfolio pieces loaded - all Canva slides)
+**Portfolio Assets**: 10 Canva presentation slides uploaded to Cloudinary + added to gallery database
 
 ## Architecture
 
@@ -55,9 +55,11 @@ M_ART/
 ├── FOR_THE_ARTIST.txt           # User-facing guide
 ├── M_Canva/                     # ✅ NEW: Source Canva slide PNGs (1.png - 10.png)
 ├── data/
-│   └── canva-slide-urls.json   # ✅ NEW: Cloudinary URLs for uploaded slides
+│   └── canva-slide-urls.json   # Cloudinary URLs for uploaded slides
 ├── scripts/
-│   └── upload-canva-slides.js  # ✅ NEW: Batch upload script for Canva assets
+│   ├── upload-canva-slides.js  # Batch upload script for Canva assets to Cloudinary
+│   ├── add-canva-slides-to-gallery.js  # ✅ NEW: Add Portfolio slides to database
+│   └── remove-placeholder-pieces.js    # ✅ NEW: Clean up placeholder/demo pieces
 ├── features/                    # Feature-specific requirements (cascading docs)
 │   ├── landing/requirements.md
 │   ├── gallery/requirements.md
@@ -142,12 +144,17 @@ M_ART/
 - Mobile-responsive design
 - All content from Canva presentation slides
 
-### Gallery
-- Masonry grid layout (responsive: 1/2/3 cols)
-- Filter by collection (Vases, Bowls, Sculptural, etc.)
-- Sort by date/featured
-- Lightbox viewer
-- Lazy loading
+### Gallery ✅ UPDATED
+- **Database**: 10 Portfolio pieces loaded (Canva presentation slides)
+- **Collections**: Portfolio (journey timeline), plus standard collections (Vases, Bowls, Sculptural, etc.)
+- Masonry grid layout (responsive: 1/2/3/4 cols)
+- Filter by collection dropdown (includes Portfolio)
+- Sort by date or alphabetical
+- Lightbox viewer with hover overlays
+- Lazy loading with staggered animations
+- **Scripts**:
+  - `scripts/add-canva-slides-to-gallery.js` - Batch add Portfolio slides to database
+  - `scripts/remove-placeholder-pieces.js` - Clean up placeholder/demo pieces
 
 ### Admin Panel (/admin)
 - Password-protected (default: "admin123")
