@@ -1,0 +1,49 @@
+# Page snapshot
+
+```yaml
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - img "Pottery background" [ref=e5]
+    - img "Floating pottery" [ref=e8]
+    - img "Floating vase" [ref=e10]
+    - generic [ref=e11]:
+      - heading "M_ART" [level=1] [ref=e12]
+      - paragraph [ref=e13]: Ceramic Artist | Handcrafted Pottery
+      - link "View Gallery" [ref=e14]:
+        - /url: /gallery
+    - img [ref=e16]
+  - heading "Featured Work" [level=2] [ref=e20]
+  - generic [ref=e29]:
+    - generic [ref=e31]:
+      - paragraph [ref=e32]: Handcrafted with Passion
+      - heading "About the Artist" [level=2] [ref=e33]
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - paragraph [ref=e37]: Each piece is handcrafted with care, exploring the beautiful intersection of form, function, and artistic expression.
+        - paragraph [ref=e38]: Working with clay allows me to create both functional pottery and sculptural pieces that bring warmth and artistry into everyday life.
+        - paragraph [ref=e39]: My work reflects a deep appreciation for traditional techniques combined with contemporary aesthetics, honoring the timeless craft of ceramics.
+        - generic [ref=e40]:
+          - link "Explore My Work" [ref=e41]:
+            - /url: /gallery
+          - link "Commission a Piece" [ref=e42]:
+            - /url: "#contact"
+      - generic [ref=e43]:
+        - heading "Specialties" [level=3] [ref=e44]
+        - list [ref=e45]:
+          - listitem [ref=e46]:
+            - generic [ref=e48]:
+              - heading "Functional Pottery" [level=4] [ref=e49]
+              - paragraph [ref=e50]: Handcrafted bowls, mugs, and serving pieces
+          - listitem [ref=e51]:
+            - generic [ref=e53]:
+              - heading "Sculptural Art" [level=4] [ref=e54]
+              - paragraph [ref=e55]: Unique ceramic sculptures and installations
+          - listitem [ref=e56]:
+            - generic [ref=e58]:
+              - heading "Custom Commissions" [level=4] [ref=e59]
+              - paragraph [ref=e60]: Personalized pieces for your space
+          - listitem [ref=e61]:
+            - generic [ref=e63]:
+              - heading "Traditional Techniques" [level=4] [ref=e64]
+              - paragraph [ref=e65]: Wheel-throwing, hand-building, glazing
+```

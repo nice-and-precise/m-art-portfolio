@@ -1,0 +1,76 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - paragraph [ref=e6]: Complete Collection
+      - heading "Gallery" [level=1] [ref=e7]
+      - paragraph [ref=e9]: 8 pieces of handcrafted ceramics
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: "Filter by:"
+        - combobox [ref=e14]:
+          - option "All Collections" [selected]
+          - option "Vases"
+          - option "Bowls"
+          - option "Sculptural"
+          - option "Functional"
+          - option "Decorative"
+          - option "Experimental"
+      - generic [ref=e16]:
+        - generic [ref=e17]: "Sort by:"
+        - combobox [ref=e18]:
+          - option "Newest First" [selected]
+          - option "Alphabetical"
+    - generic [ref=e19]:
+      - generic [ref=e21] [cursor=pointer]:
+        - img "Abstract Ceramic Form" [ref=e22]
+        - generic [ref=e24]:
+          - heading "Abstract Ceramic Form" [level=3] [ref=e25]
+          - paragraph [ref=e26]: Experimental
+          - paragraph [ref=e27]: Experimental piece pushing boundaries of traditional pottery
+      - generic [ref=e29] [cursor=pointer]:
+        - img "Raku Fired Bowl" [ref=e30]
+        - generic [ref=e32]:
+          - heading "Raku Fired Bowl" [level=3] [ref=e33]
+          - paragraph [ref=e34]: Bowls
+          - paragraph [ref=e35]: Traditional raku firing technique creating unique crackle patterns
+      - generic [ref=e37] [cursor=pointer]:
+        - img "Textured Ceramic Vase" [ref=e38]
+        - generic [ref=e40]:
+          - heading "Textured Ceramic Vase" [level=3] [ref=e41]
+          - paragraph [ref=e42]: Vases
+          - paragraph [ref=e43]: Exploring surface texture and form with contemporary glazing techniques
+      - generic [ref=e45] [cursor=pointer]:
+        - img "Minimalist Vessel Collection" [ref=e46]
+        - generic [ref=e48]:
+          - heading "Minimalist Vessel Collection" [level=3] [ref=e49]
+          - paragraph [ref=e50]: Decorative
+          - paragraph [ref=e51]: Clean lines and matte glazes in neutral earth tones
+      - generic [ref=e53] [cursor=pointer]:
+        - img "Artisan Coffee Mug" [ref=e54]
+        - generic [ref=e56]:
+          - heading "Artisan Coffee Mug" [level=3] [ref=e57]
+          - paragraph [ref=e58]: Functional
+          - paragraph [ref=e59]: Hand-thrown stoneware mug with comfortable handle and rustic glaze
+      - generic [ref=e61] [cursor=pointer]:
+        - img "Organic Form Sculpture" [ref=e62]
+        - generic [ref=e64]:
+          - heading "Organic Form Sculpture" [level=3] [ref=e65]
+          - paragraph [ref=e66]: Sculptural
+          - paragraph [ref=e67]: Contemporary sculptural piece exploring fluid ceramic forms
+      - generic [ref=e69] [cursor=pointer]:
+        - img "Celadon Glazed Bowl" [ref=e70]
+        - generic [ref=e72]:
+          - heading "Celadon Glazed Bowl" [level=3] [ref=e73]
+          - paragraph [ref=e74]: Bowls
+          - paragraph [ref=e75]: Handcrafted ceramic bowl with traditional celadon glaze finish
+      - generic [ref=e77] [cursor=pointer]:
+        - img "Elegant Terracotta Vase" [ref=e78]
+        - generic [ref=e80]:
+          - heading "Elegant Terracotta Vase" [level=3] [ref=e81]
+          - paragraph [ref=e82]: Vases
+          - paragraph [ref=e83]: Hand-thrown terracotta vase with natural earth tones and organic form
+  - alert [ref=e84]
+```

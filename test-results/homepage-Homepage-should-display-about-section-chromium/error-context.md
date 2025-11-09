@@ -1,0 +1,95 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - img "Pottery background" [ref=e5]
+      - img "Floating pottery" [ref=e8]
+      - img "Floating vase" [ref=e10]
+      - generic [ref=e11]:
+        - heading "M_ART" [level=1] [ref=e12]
+        - paragraph [ref=e13]: Ceramic Artist | Handcrafted Pottery
+        - link "View Gallery" [ref=e14] [cursor=pointer]:
+          - /url: /gallery
+      - img [ref=e16]
+    - generic [ref=e19]:
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: Selected Work
+        - heading "Featured Pieces" [level=2] [ref=e23]
+      - generic [ref=e25]:
+        - link "Elegant Terracotta Vase Elegant Terracotta Vase Vases" [ref=e26] [cursor=pointer]:
+          - /url: /gallery
+          - img "Elegant Terracotta Vase" [ref=e27]
+          - generic [ref=e29]:
+            - heading "Elegant Terracotta Vase" [level=3] [ref=e30]
+            - paragraph [ref=e31]: Vases
+        - link "Celadon Glazed Bowl Celadon Glazed Bowl Bowls" [ref=e33] [cursor=pointer]:
+          - /url: /gallery
+          - img "Celadon Glazed Bowl" [ref=e34]
+          - generic [ref=e36]:
+            - heading "Celadon Glazed Bowl" [level=3] [ref=e37]
+            - paragraph [ref=e38]: Bowls
+        - link "Organic Form Sculpture Organic Form Sculpture Sculptural" [ref=e40] [cursor=pointer]:
+          - /url: /gallery
+          - img "Organic Form Sculpture" [ref=e41]
+          - generic [ref=e43]:
+            - heading "Organic Form Sculpture" [level=3] [ref=e44]
+            - paragraph [ref=e45]: Sculptural
+        - link "Minimalist Vessel Collection Minimalist Vessel Collection Decorative" [ref=e47] [cursor=pointer]:
+          - /url: /gallery
+          - img "Minimalist Vessel Collection" [ref=e48]
+          - generic [ref=e50]:
+            - heading "Minimalist Vessel Collection" [level=3] [ref=e51]
+            - paragraph [ref=e52]: Decorative
+        - link "Textured Ceramic Vase Textured Ceramic Vase Vases" [ref=e54] [cursor=pointer]:
+          - /url: /gallery
+          - img "Textured Ceramic Vase" [ref=e55]
+          - generic [ref=e57]:
+            - heading "Textured Ceramic Vase" [level=3] [ref=e58]
+            - paragraph [ref=e59]: Vases
+        - link "Raku Fired Bowl Raku Fired Bowl Bowls" [ref=e61] [cursor=pointer]:
+          - /url: /gallery
+          - img "Raku Fired Bowl" [ref=e62]
+          - generic [ref=e64]:
+            - heading "Raku Fired Bowl" [level=3] [ref=e65]
+            - paragraph [ref=e66]: Bowls
+      - generic [ref=e68]:
+        - link "Explore Full Collection" [ref=e69] [cursor=pointer]:
+          - /url: /gallery
+        - paragraph [ref=e70]: Discover more handcrafted ceramics
+    - generic [ref=e72]:
+      - generic [ref=e74]:
+        - paragraph [ref=e75]: Handcrafted with Passion
+        - heading "About the Artist" [level=2] [ref=e76]
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - paragraph [ref=e80]: Each piece is handcrafted with care, exploring the beautiful intersection of form, function, and artistic expression.
+          - paragraph [ref=e81]: Working with clay allows me to create both functional pottery and sculptural pieces that bring warmth and artistry into everyday life.
+          - paragraph [ref=e82]: My work reflects a deep appreciation for traditional techniques combined with contemporary aesthetics, honoring the timeless craft of ceramics.
+          - generic [ref=e83]:
+            - link "Explore My Work" [ref=e84] [cursor=pointer]:
+              - /url: /gallery
+            - link "Commission a Piece" [ref=e85] [cursor=pointer]:
+              - /url: "#contact"
+        - generic [ref=e86]:
+          - heading "Specialties" [level=3] [ref=e87]
+          - list [ref=e88]:
+            - listitem [ref=e89]:
+              - generic [ref=e91]:
+                - heading "Functional Pottery" [level=4] [ref=e92]
+                - paragraph [ref=e93]: Handcrafted bowls, mugs, and serving pieces
+            - listitem [ref=e94]:
+              - generic [ref=e96]:
+                - heading "Sculptural Art" [level=4] [ref=e97]
+                - paragraph [ref=e98]: Unique ceramic sculptures and installations
+            - listitem [ref=e99]:
+              - generic [ref=e101]:
+                - heading "Custom Commissions" [level=4] [ref=e102]
+                - paragraph [ref=e103]: Personalized pieces for your space
+            - listitem [ref=e104]:
+              - generic [ref=e106]:
+                - heading "Traditional Techniques" [level=4] [ref=e107]
+                - paragraph [ref=e108]: Wheel-throwing, hand-building, glazing
+  - alert [ref=e109]
+```
