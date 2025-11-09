@@ -1,9 +1,9 @@
 # M_ART Ceramics Portfolio
 
-<!-- Last updated: 2025-11-08 - Initial ceramics portfolio setup -->
+<!-- Last updated: 2025-11-09 - Enhanced UI with professional ceramics portfolio design -->
 
 ## Purpose
-Beautiful, mobile-first portfolio for an 18-year-old ceramic artist to showcase pottery and upload new work from her phone. Surprise gift project.
+Professional, museum-quality portfolio for an 18-year-old ceramic artist. Mobile-first with phone camera upload. Inspired by best ceramics portfolios (Format, professional artist websites).
 
 ## Current State
 **Status**: 🟢 LIVE AND DEPLOYED
@@ -11,29 +11,37 @@ Beautiful, mobile-first portfolio for an 18-year-old ceramic artist to showcase 
 **Stack**: Next.js 14, TypeScript, Tailwind, Cloudinary, Vercel
 **Deployment**: https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio
 **GitHub**: https://github.com/nice-and-precise/m-art-portfolio
+**Design**: Professional ceramics portfolio with sage green accents
 
 ## Architecture
 
 ### Tech Stack (What IS)
 - **Framework**: Next.js 14.2.0 (App Router, Server Components)
-- **Styling**: Tailwind CSS with pottery color palette (clay/glaze colors)
-- **Images**: Cloudinary (dfrzq3gvh) - auto-optimization, CDN delivery
+- **Styling**: Tailwind CSS with professional pottery color palette
+- **Images**: Cloudinary (dfrzq3gvh) + Unsplash placeholders - auto-optimization, CDN
 - **Auth**: Simple password (JWT) - admin panel access only
 - **Database**: JSON file storage (data/pottery.json) - no external DB
 - **Deploy**: Vercel serverless functions + static generation
 
-### Pottery Color Palette (Tailwind)
+### Professional Color Palette
 ```typescript
-clay: { 50-900 } // Cream → Terracotta → Dark Earth
-glaze: { celadon, sage, honey, matte }
+clay: { 50-900 }     // Cream → Terracotta → Dark Earth
+glaze: {
+  sage: '#8B9D83',   // Accent color (inspired by top portfolios)
+  celadon: '#7FA5A3', // Secondary accents
+  honey: '#D4A574',
+  matte: '#F0EBE3'
+}
 ```
 
-### Key Design Decisions
-1. **Mobile-first upload**: Artist uses phone camera → instant upload
-2. **No authentication for public**: Anyone can view, only artist uploads
-3. **Masonry grid**: Better for pottery (varied aspect ratios)
-4. **Cloudinary**: Handles all image optimization automatically
-5. **Simple password**: No user accounts, just one admin password
+### Key Design Principles
+1. **Mobile-first upload**: Phone camera → instant upload with large touch targets
+2. **Professional UI**: Inspired by Format ceramics portfolios
+3. **Varied grid layouts**: Dynamic sizing (large featured pieces)
+4. **Sage green accents**: Professional artist website standard
+5. **Sophisticated typography**: Large headings, uppercase labels, generous spacing
+6. **Parallax hero**: Multi-layer scrolling effect with pottery images
+7. **Masonry grids**: Pinterest-style for varied pottery dimensions
 
 ## File Structure
 ```
