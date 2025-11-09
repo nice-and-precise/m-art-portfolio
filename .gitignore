@@ -60,6 +60,10 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+nul
+temp-icon.svg
+public/favicon.ico
+public/images/nul
 
 # Vercel
 .vercel

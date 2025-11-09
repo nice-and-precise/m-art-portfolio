@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: 'Showcasing beautiful artwork and creative expressions',
   keywords: ['art', 'portfolio', 'gallery', 'artist', 'artwork'],
   authors: [{ name: 'M_ART' }],
+  icons: {
+    icon: '/icon.svg',
+  },
   openGraph: {
     title: 'M_ART - Art Portfolio & Gallery',
     description: 'Showcasing beautiful artwork and creative expressions',

@@ -118,13 +118,26 @@ export async function deletePiece(id: string): Promise<boolean> {
 
 /**
  * Save pieces to file (atomic write)
+ * NOTE: This works locally but fails on Vercel (read-only filesystem)
+ * For production, consider using Vercel Postgres, MongoDB, or other database
  */
 async function savePieces(pieces: PotteryPiece[]): Promise<void> {
   const db: Database = { pieces };
   const tempFile = `${DB_FILE}.tmp`;
 
-  await fs.writeFile(tempFile, JSON.stringify(db, null, 2));
-  await fs.rename(tempFile, DB_FILE);
+  try {
+    await fs.writeFile(tempFile, JSON.stringify(db, null, 2));
+    await fs.rename(tempFile, DB_FILE);
+  } catch (error) {
+    // On Vercel production, the filesystem is read-only except for /tmp
+    // This means delete/upload won't persist between function invocations
+    if (process.env.VERCEL) {
+      console.error('Vercel filesystem is read-only - changes will not persist');
+      console.error('Consider migrating to Vercel Postgres or MongoDB for production');
+      throw new Error('Delete/Upload requires a database - JSON file storage is read-only on Vercel');
+    }
+    throw error;
+  }
 }
 
 /**

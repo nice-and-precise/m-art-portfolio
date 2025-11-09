@@ -50,26 +50,31 @@ export async function DELETE(
     const cookie = request.headers.get('cookie') || '';
 
     if (!(await isAuthenticated(authHeader, cookie))) {
+      console.error('DELETE unauthorized - no valid auth token');
       return NextResponse.json(
-        { error: 'Unauthorized' } as ApiError,
+        { error: 'Unauthorized - please log in again' } as ApiError,
         { status: 401 }
       );
     }
 
+    console.log(`Attempting to delete piece: ${params.id}`);
     const success = await deletePiece(params.id);
 
     if (!success) {
+      console.error(`Piece not found: ${params.id}`);
       return NextResponse.json(
         { error: 'Piece not found' } as ApiError,
         { status: 404 }
       );
     }
 
+    console.log(`Successfully deleted piece: ${params.id}`);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('DELETE piece error:', error);
+    console.error('DELETE piece error details:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to delete piece' } as ApiError,
+      { error: `Failed to delete piece: ${errorMessage}` } as ApiError,
       { status: 500 }
     );
   }
