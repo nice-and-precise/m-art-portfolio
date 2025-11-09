@@ -1,8 +1,22 @@
 # Vercel Postgres Setup Guide
 
 **Date**: 2025-11-09
-**Status**: Ready to deploy
-**Time Required**: 10 minutes
+**Status**: Automated monitoring active
+**Time Required**: 5 minutes (automated)
+
+---
+
+## 🤖 Automated Setup (Recommended)
+
+A monitoring script is running in the background that will automatically detect when you create the database and guide you through initialization.
+
+**What's automated**:
+- ✅ Detects database creation via Vercel API
+- ✅ Verifies database connection to project
+- ✅ Provides next steps for SQL initialization
+- ✅ All you need to do: Create the database in the browser
+
+**Status**: Check terminal for real-time progress
 
 ---
 

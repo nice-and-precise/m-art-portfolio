@@ -1,17 +1,18 @@
 # M_ART Ceramics Portfolio
 
-<!-- Last updated: 2025-11-09 - Enhanced UI with professional ceramics portfolio design -->
+<!-- Last updated: 2025-11-09 - Migrated to Supabase Postgres database -->
 
 ## Purpose
 Professional, museum-quality portfolio for an 18-year-old ceramic artist. Mobile-first with phone camera upload. Inspired by best ceramics portfolios (Format, professional artist websites).
 
 ## Current State
-**Status**: 🟢 LIVE AND DEPLOYED
+**Status**: ✅ LIVE WITH SUPABASE DATABASE
 **Live URL**: https://m-art-portfolio.vercel.app
-**Stack**: Next.js 14, TypeScript, Tailwind, Cloudinary, Vercel
+**Stack**: Next.js 14, TypeScript, Tailwind, Cloudinary, Supabase Postgres
 **Deployment**: https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio
 **GitHub**: https://github.com/nice-and-precise/m-art-portfolio
 **Design**: Professional ceramics portfolio with sage green accents
+**Database**: Supabase Postgres (8 pottery pieces loaded)
 
 ## Architecture
 
@@ -20,7 +21,7 @@ Professional, museum-quality portfolio for an 18-year-old ceramic artist. Mobile
 - **Styling**: Tailwind CSS with professional pottery color palette
 - **Images**: Cloudinary (dfrzq3gvh) + Unsplash placeholders - auto-optimization, CDN
 - **Auth**: Simple password (JWT) - admin panel access only
-- **Database**: JSON file storage (data/pottery.json) - no external DB
+- **Database**: **Supabase Postgres** (migrated from JSON file storage) - @vercel/postgres SDK
 - **Deploy**: Vercel serverless functions + static generation
 
 ### Professional Color Palette
