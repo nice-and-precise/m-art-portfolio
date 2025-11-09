@@ -191,9 +191,11 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
       return await getPieceById(id);
     }
 
-    const result = await sql<PotteryPiece>`
+    // Build the UPDATE query manually since @vercel/postgres doesn't support sql.raw()
+    const setClause = fields.join(', ');
+    const query = `
       UPDATE pottery_pieces
-      SET ${sql.raw(fields.join(', '))}
+      SET ${setClause}
       WHERE id = $${paramIndex}
       RETURNING
         id,
@@ -204,8 +206,9 @@ export async function updatePiece(id: string, updates: Partial<PotteryPiece>): P
         featured,
         created_at as "createdAt",
         updated_at as "updatedAt"
-    `.values(...values);
+    `;
 
+    const result = await sql.query<PotteryPiece>(query, values);
     return result.rows[0] || null;
   } catch (error) {
     console.error(`Database error in updatePiece(${id}):`, error);
