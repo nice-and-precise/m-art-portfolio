@@ -1,18 +1,21 @@
 # M_ART Ceramics Portfolio
 
-<!-- Last updated: 2025-11-09 - Contact form + Admin submissions viewer complete -->
+<!-- Last updated: 2025-11-09 - Canva slides integrated into homepage hero and parallax -->
 
 ## Purpose
-Professional, museum-quality portfolio for an 18-year-old ceramic artist. Mobile-first with phone camera upload. Inspired by best ceramics portfolios (Format, professional artist websites).
+Professional, museum-quality portfolio for Molly Anne Damhof, an 18-year-old award-winning ceramic artist. Mobile-first with phone camera upload. Features her 3-year artistic journey from sophomore to senior year, achievements, and signature galaxy glaze collection.
 
 ## Current State
-**Status**: ✅ LIVE WITH SUPABASE DATABASE (REST API)
+**Status**: ✅ LIVE WITH SUPABASE DATABASE + CANVA PORTFOLIO INTEGRATION
 **Live URL**: https://m-art-portfolio.vercel.app
 **Stack**: Next.js 14, TypeScript, Tailwind, Cloudinary, Supabase Postgres
 **Deployment**: https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio
 **GitHub**: https://github.com/nice-and-precise/m-art-portfolio
+**Artist**: Molly Anne Damhof
+**Contact**: mollydamhof@gmail.com | 515-230-2118
 **Design**: Professional ceramics portfolio with sage green accents
 **Database**: Supabase Postgres via REST API (8 pottery pieces loaded)
+**Portfolio Assets**: 10 Canva presentation slides uploaded to Cloudinary
 
 ## Architecture
 
@@ -50,6 +53,11 @@ M_ART/
 ├── CLAUDE.md                    # Living documentation (ALWAYS UP TO DATE)
 ├── README.md                    # GitHub readme
 ├── FOR_THE_ARTIST.txt           # User-facing guide
+├── M_Canva/                     # ✅ NEW: Source Canva slide PNGs (1.png - 10.png)
+├── data/
+│   └── canva-slide-urls.json   # ✅ NEW: Cloudinary URLs for uploaded slides
+├── scripts/
+│   └── upload-canva-slides.js  # ✅ NEW: Batch upload script for Canva assets
 ├── features/                    # Feature-specific requirements (cascading docs)
 │   ├── landing/requirements.md
 │   ├── gallery/requirements.md
@@ -59,12 +67,18 @@ M_ART/
 ├── docs/                        # Reference documentation
 │   ├── setup/                   # Setup guides (DATABASE_SETUP_GUIDE, QUICKSTART, etc.)
 │   ├── reference/               # Reference docs (STANDARDS, TESTING_CHECKLIST, etc.)
+│   ├── research/                # ✅ NEW: Research docs
+│   │   └── canva-thumbnail-extraction.md  # Findings on extracting pottery from slides
 │   └── troubleshooting/         # Troubleshooting guides (VERCEL_ENV_FIX, etc.)
 ├── archive/
 │   └── sessions/                # Session-specific docs (DEBUG_SESSION, FINAL_SUMMARY, etc.)
 ├── src/
 │   ├── app/
-│   │   ├── contact/page.tsx     # Contact form page
+│   │   ├── about/page.tsx      # ✅ NEW: Artist journey timeline + achievements
+│   │   ├── contact/page.tsx    # Contact form (updated with Molly's info)
+│   │   ├── page.tsx            # Homepage (updated with Navigation)
+│   │   ├── gallery/page.tsx    # Gallery (updated with Navigation)
+│   │   ├── layout.tsx          # Root layout (updated SEO metadata)
 │   │   ├── admin/
 │   │   │   ├── dashboard/page.tsx  # Pottery management
 │   │   │   └── submissions/page.tsx # Contact submissions viewer
@@ -72,6 +86,12 @@ M_ART/
 │   │       ├── contact/route.ts      # Contact form submission
 │   │       └── admin/submissions/    # Submissions CRUD
 │   ├── components/
+│   │   ├── ui/
+│   │   │   └── Navigation.tsx  # ✅ NEW: Global navigation component
+│   │   ├── landing/
+│   │   │   ├── Hero.tsx        # Updated with "Molly Anne Damhof"
+│   │   │   ├── About.tsx       # Updated section title
+│   │   │   └── ...
 │   │   └── contact/ContactForm.tsx
 │   ├── lib/
 │   │   └── db.ts                # Supabase database utilities
@@ -86,11 +106,41 @@ M_ART/
 
 ## Active Features
 
+### Navigation (NEW)
+- Global navigation component with sticky header
+- Mobile-responsive hamburger menu
+- Active page highlighting
+- Links: Home, About, Gallery, Contact
+- Component: `src/components/ui/Navigation.tsx`
+
 ### Landing Page
-- Full-screen hero with pottery background
-- Featured gallery grid (6 pieces)
-- About section with artist bio
-- Smooth scroll animations
+- **Hero Section**: ✅ Updated with Canva assets
+  - Background: Canva Slide 1 (portfolio cover) - replaces generic stock photo
+  - Artist name: "Molly Anne Damhof" - Ceramic Artist
+  - Parallax floating elements: Cropped pottery from galaxy glaze collection (slide 5)
+  - Two CTAs: View Gallery + My Journey (links to About)
+  - Smooth scroll animations
+  - **Image Source**: Cloudinary-optimized Canva slides with responsive transformations
+- **Featured Gallery**: Database-driven (6 featured pieces)
+- **About Section**: Enhanced with galaxy glaze showcase
+  - Background accent: Faded galaxy glaze imagery
+  - Galaxy Glaze callout box: Links to About page journey
+  - Specialties list
+  - Commission CTA
+
+### About Page (/about) ✅ NEW
+- **Hero**: Full-width banner using Canva slide 1 (portfolio cover)
+- **Timeline Section**: Three-phase artistic journey
+  - Sophomore Year (2023-2024): Learning basics, wheel throwing (slide 2)
+  - Junior Year (2024-2025): Advanced glazing, art exhibits (slide 3)
+  - Senior Year (2025-2026): Galaxy glaze collection, signature style (slide 5)
+- **Achievements Section**: Three award cards
+  - Legacy Award (planter)
+  - Paramount Art Show - 3rd Place
+  - Art State Fair - Superior (10/10)
+- Professional timeline layout with sticky text + images
+- Mobile-responsive design
+- All content from Canva presentation slides
 
 ### Gallery
 - Masonry grid layout (responsive: 1/2/3 cols)
@@ -117,8 +167,11 @@ M_ART/
 - Display all submission details (name, email, phone, inquiry type, message, timestamps)
 
 ### Contact Form (/contact) ✅
+- **Artist Info**: Molly Anne Damhof | mollydamhof@gmail.com | 515-230-2118
 - Commission inquiry form with validation
 - Fields: name, email, phone (optional), inquiry type, message
+- **Commission Message**: Prominently displayed
+  - "I am more than excited to be able to reach out to people like you! Please understand it won't happen overnight, and may take at least a month to receive any commissions. Thanks!"
 - Client-side validation (email format, required fields, min length)
 - Server-side validation in API route
 - Submissions stored in Supabase `contact_submissions` table
@@ -141,6 +194,21 @@ M_ART/
 - PATCH /api/admin/submissions/[id] - Update submission status
 - DELETE /api/admin/submissions/[id] - Delete submission
 
+## SEO & Metadata
+
+### Site Metadata
+- **Title**: "Molly Anne Damhof - Ceramic Artist | M_ART Ceramics"
+- **Description**: Award-winning ceramic artist featuring signature galaxy glazes
+- **Keywords**: ceramic artist, pottery, handcrafted ceramics, molly anne damhof, galaxy glaze, iowa artist, award winning ceramics
+- **Open Graph Image**: Galaxy glaze collection (slide 5)
+- **Twitter Card**: Large image format
+
+### Page-Specific Metadata
+- **Home**: Molly Anne Damhof - Ceramic Artist
+- **About**: About Molly Anne Damhof - M_ART Ceramics (with journey description)
+- **Contact**: Contact Molly Anne Damhof (with phone/email in description)
+- **Gallery**: Gallery metadata (existing)
+
 ## Environment Variables
 ```bash
 CLOUDINARY_CLOUD_NAME=dfrzq3gvh
@@ -148,6 +216,7 @@ CLOUDINARY_API_KEY=313578916364477
 CLOUDINARY_API_SECRET=[set]
 JWT_SECRET=[generated]
 ADMIN_PASSWORD_HASH=[bcrypt hash of "admin123"]
+NEXT_PUBLIC_ARTIST_NAME="M_ART" (now hardcoded to "Molly Anne Damhof" in Hero)
 ```
 
 ## Development Workflow
@@ -203,10 +272,49 @@ After every significant change, update:
 - Mobile-first (artist is primary user)
 - Fast (static generation where possible)
 
+## Cloudinary Assets
+
+### Portfolio Journey Slides
+**Location**: `m-art/portfolio-journey/` folder in Cloudinary
+**Source**: Canva presentation slides from `C:\Users\Owner\Desktop\M_ART\M_Canva\`
+
+All 10 PNG slides uploaded:
+- **Slide 1**: Portfolio cover
+  - **Used in**: About page hero + Homepage hero background
+  - **Transformation**: `w_1920,q_85,f_auto,c_fill` for optimal web delivery
+- **Slide 2**: Sophomore year timeline (2023-2024)
+  - **Used in**: About page timeline section
+- **Slide 3**: Junior year timeline (2024-2025)
+  - **Used in**: About page timeline section
+- **Slide 4**: Achievements (Legacy Award, Paramount, State Fair)
+  - **Used in**: About page achievements section
+- **Slide 5**: Senior year galaxy glaze collection (2025-2026)
+  - **Used in**: About page timeline + Homepage hero parallax elements + Homepage About section background
+  - **Transformations**:
+    - Parallax elements: `c_crop,w_800,h_800,g_north_west/w_400,q_80,f_auto` (top-left)
+    - Parallax elements: `c_crop,w_800,h_800,g_south_east/w_400,q_80,f_auto` (bottom-right)
+    - About background: `w_800,q_70,f_auto` (faded accent)
+- Slides 6-10: Additional portfolio content (reserved for future use)
+
+**URLs stored in**: `data/canva-slide-urls.json`
+
+### Image Optimization Strategy
+- **Hero backgrounds**: 1920px width, quality 85, auto format (WebP/AVIF)
+- **Parallax elements**: 400px width, cropped from galaxy glaze slide
+- **Background accents**: 800px width, quality 70, low opacity overlays
+- **Performance**: All images use Cloudinary CDN with automatic format selection
+
+### Upload Script
+- **Script**: `scripts/upload-canva-slides.js`
+- **Usage**: `node scripts/upload-canva-slides.js`
+- **Purpose**: Batch upload Canva slides to Cloudinary with organized folder structure
+
 ## Production URLs
 - **Live Site**: https://m-art-portfolio.vercel.app
+- **About Page**: https://m-art-portfolio.vercel.app/about
 - **Admin Login**: https://m-art-portfolio.vercel.app/admin/login (password: admin123)
 - **Gallery**: https://m-art-portfolio.vercel.app/gallery
+- **Contact**: https://m-art-portfolio.vercel.app/contact
 - **Vercel Dashboard**: https://vercel.com/jordans-projects-4bff4baa/m-art-portfolio
 - **GitHub**: https://github.com/nice-and-precise/m-art-portfolio
 
