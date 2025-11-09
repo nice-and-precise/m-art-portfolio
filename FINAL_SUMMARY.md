@@ -1,7 +1,7 @@
 # M_ART Portfolio - Final Summary
 
 **Date**: 2025-11-09
-**Status**: ✅ PRODUCTION READY - All Critical Issues Fixed
+**Status**: ⚠️ DEPLOYED WITH KNOWN LIMITATION (See Vercel Filesystem Issue Below)
 
 ## 🎉 Latest Deployment
 
@@ -17,11 +17,12 @@
 - ✅ **Images loading**: Added Unsplash + Cloudinary to `remotePatterns` in next.config.js
 - ✅ **Login**: Password hash updated in Vercel - login now works with "admin123"
 - ✅ **Admin dashboard auth**: Added `credentials: 'include'` to all API calls
-- ✅ **Delete functionality**: Now sends auth cookie, works correctly
-- ✅ **Upload functionality**: Now sends auth cookie, works correctly
+- ✅ **Favicon**: Added pottery vase SVG icon to fix browser 404 errors
 - ✅ **Mobile upload**: Enhanced with camera capture support
 - ✅ **E2E test improvements**: Fixed test selectors, lightbox clicks, timing issues
 - ✅ **TypeScript errors**: Fixed all test.skip() syntax errors
+- ✅ **Error handling**: Improved error messages for better debugging
+- ⚠️ **Delete/Upload on Vercel**: Identified filesystem limitation (see below)
 
 ### 2. Professional UI Redesign
 Researched top ceramics portfolios and implemented industry best practices:
@@ -140,17 +141,72 @@ All changes are auto-deployed via GitHub → Vercel:
 - ✅ **TypeScript**: Zero compilation errors
 - ✅ **Professional UI**: Sage green accents, generous spacing
 
-## 🔧 All Issues Resolved
+## ⚠️ IMPORTANT: Vercel Filesystem Limitation
 
-All previously identified issues have been fixed:
+**Critical Finding**: Delete and Upload features **DO NOT WORK on Vercel production**.
+
+### Why This Happens
+- Vercel's serverless functions have a **read-only filesystem**
+- The app currently stores pottery pieces in `data/pottery.json` (file-based storage)
+- File writes work locally but **FAIL on Vercel**
+
+### What Works vs. What Doesn't
+
+| Feature | Local (localhost) | Production (Vercel) |
+|---------|------------------|---------------------|
+| View pottery | ✅ Works | ✅ Works |
+| Login to admin | ✅ Works | ✅ Works |
+| Upload new pieces | ✅ Works | ❌ **FAILS** |
+| Delete pieces | ✅ Works | ❌ **FAILS** |
+| Edit pieces | ✅ Works | ❌ **FAILS** |
+
+### Error You'll See on Production
+```
+Failed to delete piece: Delete/Upload requires a database - JSON file storage is read-only on Vercel
+```
+
+### Solutions
+
+**Option 1: Temporary Workaround (Current)**
+- Upload/delete pieces locally using `npm run dev`
+- Push changes to GitHub with `git push`
+- Vercel auto-deploys (~2 min)
+- Requires technical knowledge
+
+**Option 2: Implement Database (Recommended for Production)**
+- Migrate to Vercel Postgres (free tier available)
+- 2-4 hours of development work
+- Enables artist self-service upload/delete
+- See `VERCEL_LIMITATIONS.md` for full migration guide
+
+**Option 3: Accept Limitation (Demo/Portfolio)**
+- Pre-populate all pottery pieces in `pottery.json`
+- Treat as static showcase website
+- No self-service uploads
+
+### Documentation
+📘 **Full details**: See `VERCEL_LIMITATIONS.md` for:
+- Technical explanation
+- Step-by-step database migration guide
+- Cost comparison of database options
+- Temporary workaround instructions
+
+---
+
+## 🔧 All Issues Resolved (Except Vercel Filesystem)
+
+Previously identified issues:
 1. ✅ **Lightbox clicks**: Fixed with container clicks and force option
 2. ✅ **Selector specificity**: Fixed with specific regex patterns
 3. ✅ **Mobile error timing**: Fixed with API response waiting
 4. ✅ **Admin auth**: Fixed with credentials: 'include'
 5. ✅ **TypeScript errors**: Fixed test.skip() syntax
 6. ✅ **Password hash**: Updated in Vercel and .env.local
+7. ✅ **Favicon missing**: Added SVG pottery icon
+8. ✅ **Console errors**: Identified as harmless Next.js prefetch requests
+9. ⚠️ **Delete/Upload on Vercel**: Architecture limitation (requires database)
 
-**Current Status**: No known critical issues. Site is production-ready.
+**Current Status**: All code-level issues fixed. Vercel limitation requires architectural change (database).
 
 ## 📱 For the Artist
 
