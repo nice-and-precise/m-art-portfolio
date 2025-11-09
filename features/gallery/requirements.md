@@ -1,6 +1,6 @@
 # Gallery Page
 
-<!-- Status: ✅ LIVE | Last updated: 2025-11-08 -->
+<!-- Status: ✅ LIVE | Last updated: 2025-11-09 -->
 
 ## What IS
 Masonry grid gallery with filtering, sorting, and lightbox viewer.
@@ -21,8 +21,8 @@ Masonry grid gallery with filtering, sorting, and lightbox viewer.
 - Query params: `?collection=vases&sort=date`
 
 ## Data Needs
-- All pottery pieces from data/pottery.json
-- Collections list (unique values)
+- All pottery pieces from Supabase (via /api/pieces)
+- Collections list (unique values from database)
 - Image URLs from Cloudinary
 
 ## Interactions

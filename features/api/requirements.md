@@ -1,9 +1,9 @@
 # API Routes
 
-<!-- Status: ✅ LIVE | Last updated: 2025-11-08 -->
+<!-- Status: ✅ LIVE | Last updated: 2025-11-09 -->
 
 ## What IS
-Next.js API routes for auth, pottery CRUD, and image uploads.
+Next.js API routes for auth, pottery CRUD, contact forms, and image uploads.
 
 ## Endpoints
 
@@ -39,11 +39,35 @@ Next.js API routes for auth, pottery CRUD, and image uploads.
 - Uploads to Cloudinary
 - Returns: `{ url: string, publicId: string }`
 
+### Contact Form (Public)
+**POST /api/contact**
+- Body: `{ name, email, phone?, inquiryType, message }`
+- Auth: None (public endpoint)
+- Validation: Server-side validation matching client-side
+- Returns: `{ success: true, message: string }`
+- Stores in Supabase `contact_submissions` table
+
+### Contact Submissions Management (Admin)
+**GET /api/admin/submissions**
+- Auth: Required
+- Returns: `ContactSubmission[]` (sorted by created_at desc)
+
+**PATCH /api/admin/submissions/[id]**
+- Body: `{ status: 'new' | 'read' | 'responded' | 'archived' }`
+- Auth: Required
+- Returns: Updated `ContactSubmission`
+
+**DELETE /api/admin/submissions/[id]**
+- Auth: Required
+- Returns: `{ success: true }`
+
 ## Data Storage
-- File: `data/pottery.json`
-- Structure: `{ pieces: Pottery[] }`
-- Atomic writes (read → modify → write)
-- No database needed for MVP
+- **Database**: Supabase Postgres (REST API via @supabase/supabase-js)
+- **Tables**:
+  - `pottery` - All pottery pieces with images and metadata
+  - `contact_submissions` - Contact form submissions with status tracking
+- **Serverless-optimized**: REST API calls instead of persistent connections
+- **Connection**: Environment variables for Supabase URL and anon key
 
 ## Error Handling
 - 401: Unauthorized (missing/invalid token)

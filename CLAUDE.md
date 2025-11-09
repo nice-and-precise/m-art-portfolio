@@ -47,30 +47,41 @@ glaze: {
 ## File Structure
 ```
 M_ART/
-├── CLAUDE.md                    # This file
-├── features/
-│   ├── landing/
-│   │   └── requirements.md      # Hero + featured gallery
-│   ├── gallery/
-│   │   └── requirements.md      # Masonry grid + filters
-│   ├── admin/
-│   │   └── requirements.md      # Upload interface
-│   └── api/
-│       └── requirements.md      # Backend routes
+├── CLAUDE.md                    # Living documentation (ALWAYS UP TO DATE)
+├── README.md                    # GitHub readme
+├── FOR_THE_ARTIST.txt           # User-facing guide
+├── features/                    # Feature-specific requirements (cascading docs)
+│   ├── landing/requirements.md
+│   ├── gallery/requirements.md
+│   ├── admin/requirements.md
+│   ├── contact/requirements.md
+│   └── api/requirements.md
+├── docs/                        # Reference documentation
+│   ├── setup/                   # Setup guides (DATABASE_SETUP_GUIDE, QUICKSTART, etc.)
+│   ├── reference/               # Reference docs (STANDARDS, TESTING_CHECKLIST, etc.)
+│   └── troubleshooting/         # Troubleshooting guides (VERCEL_ENV_FIX, etc.)
+├── archive/
+│   └── sessions/                # Session-specific docs (DEBUG_SESSION, FINAL_SUMMARY, etc.)
 ├── src/
 │   ├── app/
 │   │   ├── contact/page.tsx     # Contact form page
-│   │   └── api/contact/route.ts # Contact submission endpoint
+│   │   ├── admin/
+│   │   │   ├── dashboard/page.tsx  # Pottery management
+│   │   │   └── submissions/page.tsx # Contact submissions viewer
+│   │   └── api/
+│   │       ├── contact/route.ts      # Contact form submission
+│   │       └── admin/submissions/    # Submissions CRUD
 │   ├── components/
-│   │   └── contact/ContactForm.tsx  # Contact form component
+│   │   └── contact/ContactForm.tsx
 │   ├── lib/
-│   │   └── db.ts                # Database utilities (pottery + contact)
+│   │   └── db.ts                # Supabase database utilities
 │   └── types/
-│       ├── pottery.ts           # Pottery types
-│       └── contact.ts           # Contact form types
+│       ├── pottery.ts
+│       └── contact.ts
 └── supabase/
     └── migrations/
-        └── 002_create_contact_submissions.sql  # Contact table schema
+        ├── 001_create_pottery.sql
+        └── 002_create_contact_submissions.sql
 ```
 
 ## Active Features
@@ -146,18 +157,35 @@ npm run build    # Production build
 vercel --prod    # Deploy to production
 ```
 
+## Documentation Structure (Cascading Markdown)
+
+**Living Documentation Pattern:**
+- **CLAUDE.md** (this file) - The single source of truth for "what IS now"
+- **features/*/requirements.md** - Feature-specific details, updated atomically with code
+- **docs/** - Reference material (setup guides, standards, troubleshooting)
+- **archive/** - Historical session docs (never delete, just archive)
+
+**Rules:**
+1. CLAUDE.md is ALWAYS current - update with every commit
+2. Feature requirements.md cascade from CLAUDE.md
+3. Remove or archive outdated information immediately
+4. Keep concise (token budget matters)
+5. Session-specific docs go to archive/sessions/
+
 ## Common Patterns
 
 ### Adding a New Feature
-1. Create `features/[name]/requirements.md`
+1. Create `features/[name]/requirements.md` with "What IS" and design details
 2. Build components in `src/components/[name]/`
 3. Add API routes if needed in `src/app/api/`
-4. Update this file with what changed
+4. Update CLAUDE.md with what changed
+5. Commit atomically with living docs
 
 ### Updating Documentation
 After every significant change, update:
 - This CLAUDE.md (what IS now)
 - Relevant `features/*/requirements.md`
+- Archive session docs, remove outdated info
 - Keep it concise (token budget)
 
 ### Image Upload Flow
@@ -165,12 +193,12 @@ After every significant change, update:
 2. POST to /api/upload → Cloudinary
 3. Returns optimized URLs
 4. POST to /api/pieces with metadata
-5. Saved to data/pottery.json
+5. Saved to Supabase Postgres database
 6. Instantly visible in gallery
 
 ## Constraints
 - No user accounts (only one admin)
-- No database (JSON file storage)
+- Supabase Postgres database (serverless-optimized)
 - No complex CMS (simple CRUD)
 - Mobile-first (artist is primary user)
 - Fast (static generation where possible)
