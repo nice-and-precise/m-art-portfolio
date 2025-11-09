@@ -1,142 +1,232 @@
-// JSON file database utilities
-// Last updated: 2025-11-08
+// Vercel Postgres database utilities
+// Last updated: 2025-11-09 - Migrated from JSON file storage to Postgres
 
-import fs from 'fs/promises';
-import path from 'path';
+import { sql } from '@vercel/postgres';
 import type { PotteryPiece, Collection } from '@/types/pottery';
-
-const DATA_DIR = path.join(process.cwd(), 'data');
-const DB_FILE = path.join(DATA_DIR, 'pottery.json');
-
-interface Database {
-  pieces: PotteryPiece[];
-}
-
-/**
- * Initialize database file if it doesn't exist
- */
-async function initDB(): Promise<void> {
-  try {
-    await fs.access(DATA_DIR);
-  } catch {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  }
-
-  try {
-    await fs.access(DB_FILE);
-  } catch {
-    const initialData: Database = { pieces: [] };
-    await fs.writeFile(DB_FILE, JSON.stringify(initialData, null, 2));
-  }
-}
 
 /**
  * Read all pottery pieces
  */
 export async function getAllPieces(): Promise<PotteryPiece[]> {
-  await initDB();
-  const data = await fs.readFile(DB_FILE, 'utf-8');
-  const db: Database = JSON.parse(data);
-  return db.pieces;
+  try {
+    const result = await sql<PotteryPiece>`
+      SELECT
+        id,
+        title,
+        description,
+        collection,
+        images,
+        featured,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      FROM pottery_pieces
+      ORDER BY created_at DESC
+    `;
+    return result.rows;
+  } catch (error) {
+    console.error('Database error in getAllPieces:', error);
+    throw new Error('Failed to fetch pottery pieces from database');
+  }
 }
 
 /**
  * Get pottery piece by ID
  */
 export async function getPieceById(id: string): Promise<PotteryPiece | null> {
-  const pieces = await getAllPieces();
-  return pieces.find((p) => p.id === id) || null;
+  try {
+    const result = await sql<PotteryPiece>`
+      SELECT
+        id,
+        title,
+        description,
+        collection,
+        images,
+        featured,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      FROM pottery_pieces
+      WHERE id = ${id}
+    `;
+    return result.rows[0] || null;
+  } catch (error) {
+    console.error(`Database error in getPieceById(${id}):`, error);
+    return null;
+  }
 }
 
 /**
  * Get pottery pieces by collection
  */
 export async function getPiecesByCollection(collection: Collection): Promise<PotteryPiece[]> {
-  const pieces = await getAllPieces();
-  return pieces.filter((p) => p.collection === collection);
+  try {
+    const result = await sql<PotteryPiece>`
+      SELECT
+        id,
+        title,
+        description,
+        collection,
+        images,
+        featured,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      FROM pottery_pieces
+      WHERE collection = ${collection}
+      ORDER BY created_at DESC
+    `;
+    return result.rows;
+  } catch (error) {
+    console.error(`Database error in getPiecesByCollection(${collection}):`, error);
+    return [];
+  }
 }
 
 /**
  * Get featured pottery pieces
  */
 export async function getFeaturedPieces(): Promise<PotteryPiece[]> {
-  const pieces = await getAllPieces();
-  return pieces.filter((p) => p.featured);
+  try {
+    const result = await sql<PotteryPiece>`
+      SELECT
+        id,
+        title,
+        description,
+        collection,
+        images,
+        featured,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      FROM pottery_pieces
+      WHERE featured = TRUE
+      ORDER BY created_at DESC
+    `;
+    return result.rows;
+  } catch (error) {
+    console.error('Database error in getFeaturedPieces:', error);
+    return [];
+  }
 }
 
 /**
  * Create new pottery piece
  */
 export async function createPiece(piece: Omit<PotteryPiece, 'id' | 'createdAt' | 'updatedAt'>): Promise<PotteryPiece> {
-  await initDB();
-  const pieces = await getAllPieces();
+  try {
+    const id = generateId();
+    const now = new Date().toISOString();
 
-  const newPiece: PotteryPiece = {
-    ...piece,
-    id: generateId(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+    const result = await sql<PotteryPiece>`
+      INSERT INTO pottery_pieces (
+        id, title, description, collection, images, featured, created_at, updated_at
+      )
+      VALUES (
+        ${id},
+        ${piece.title},
+        ${piece.description || null},
+        ${piece.collection},
+        ${JSON.stringify(piece.images)}::jsonb,
+        ${piece.featured},
+        ${now},
+        ${now}
+      )
+      RETURNING
+        id,
+        title,
+        description,
+        collection,
+        images,
+        featured,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+    `;
 
-  pieces.push(newPiece);
-  await savePieces(pieces);
-  return newPiece;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database error in createPiece:', error);
+    throw new Error('Failed to create pottery piece');
+  }
 }
 
 /**
  * Update pottery piece
  */
 export async function updatePiece(id: string, updates: Partial<PotteryPiece>): Promise<PotteryPiece | null> {
-  const pieces = await getAllPieces();
-  const index = pieces.findIndex((p) => p.id === id);
+  try {
+    const now = new Date().toISOString();
 
-  if (index === -1) return null;
+    // Build dynamic update query based on provided fields
+    const fields: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
 
-  pieces[index] = {
-    ...pieces[index],
-    ...updates,
-    id, // Prevent ID change
-    updatedAt: new Date().toISOString(),
-  };
+    if (updates.title !== undefined) {
+      fields.push(`title = $${paramIndex++}`);
+      values.push(updates.title);
+    }
+    if (updates.description !== undefined) {
+      fields.push(`description = $${paramIndex++}`);
+      values.push(updates.description);
+    }
+    if (updates.collection !== undefined) {
+      fields.push(`collection = $${paramIndex++}`);
+      values.push(updates.collection);
+    }
+    if (updates.images !== undefined) {
+      fields.push(`images = $${paramIndex++}::jsonb`);
+      values.push(JSON.stringify(updates.images));
+    }
+    if (updates.featured !== undefined) {
+      fields.push(`featured = $${paramIndex++}`);
+      values.push(updates.featured);
+    }
 
-  await savePieces(pieces);
-  return pieces[index];
+    // Always update updated_at
+    fields.push(`updated_at = $${paramIndex++}`);
+    values.push(now);
+
+    // Add id for WHERE clause
+    values.push(id);
+
+    if (fields.length === 1) {
+      // Only updated_at, nothing to update
+      return await getPieceById(id);
+    }
+
+    const result = await sql<PotteryPiece>`
+      UPDATE pottery_pieces
+      SET ${sql.raw(fields.join(', '))}
+      WHERE id = $${paramIndex}
+      RETURNING
+        id,
+        title,
+        description,
+        collection,
+        images,
+        featured,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+    `.values(...values);
+
+    return result.rows[0] || null;
+  } catch (error) {
+    console.error(`Database error in updatePiece(${id}):`, error);
+    throw new Error('Failed to update pottery piece');
+  }
 }
 
 /**
  * Delete pottery piece
  */
 export async function deletePiece(id: string): Promise<boolean> {
-  const pieces = await getAllPieces();
-  const filtered = pieces.filter((p) => p.id !== id);
-
-  if (filtered.length === pieces.length) return false;
-
-  await savePieces(filtered);
-  return true;
-}
-
-/**
- * Save pieces to file (atomic write)
- * NOTE: This works locally but fails on Vercel (read-only filesystem)
- * For production, consider using Vercel Postgres, MongoDB, or other database
- */
-async function savePieces(pieces: PotteryPiece[]): Promise<void> {
-  const db: Database = { pieces };
-  const tempFile = `${DB_FILE}.tmp`;
-
   try {
-    await fs.writeFile(tempFile, JSON.stringify(db, null, 2));
-    await fs.rename(tempFile, DB_FILE);
+    const result = await sql`
+      DELETE FROM pottery_pieces
+      WHERE id = ${id}
+    `;
+
+    return (result.rowCount ?? 0) > 0;
   } catch (error) {
-    // On Vercel production, the filesystem is read-only except for /tmp
-    // This means delete/upload won't persist between function invocations
-    if (process.env.VERCEL) {
-      console.error('Vercel filesystem is read-only - changes will not persist');
-      console.error('Consider migrating to Vercel Postgres or MongoDB for production');
-      throw new Error('Delete/Upload requires a database - JSON file storage is read-only on Vercel');
-    }
-    throw error;
+    console.error(`Database error in deletePiece(${id}):`, error);
+    throw new Error('Failed to delete pottery piece');
   }
 }
 
@@ -144,5 +234,7 @@ async function savePieces(pieces: PotteryPiece[]): Promise<void> {
  * Generate unique ID
  */
 function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(2, 11);
+  return `${timestamp}-${random}`;
 }
