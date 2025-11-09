@@ -34,14 +34,17 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`/api/pieces/${id}`, {
         method: 'DELETE',
+        credentials: 'include', // Send authentication cookie
       });
 
       if (res.ok) {
         setPieces(pieces.filter(p => p.id !== id));
       } else {
-        alert('Failed to delete piece');
+        const error = await res.json();
+        alert(`Failed to delete piece: ${error.error || 'Unknown error'}`);
       }
     } catch (err) {
+      console.error('Delete error:', err);
       alert('Network error');
     }
   };
@@ -61,6 +64,7 @@ export default function AdminDashboard() {
       const uploadRes = await fetch('/api/upload', {
         method: 'POST',
         body: uploadFormData,
+        credentials: 'include', // Send authentication cookie
       });
 
       if (!uploadRes.ok) throw new Error('Upload failed');
@@ -79,6 +83,7 @@ export default function AdminDashboard() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pieceData),
+        credentials: 'include', // Send authentication cookie
       });
 
       if (createRes.ok) {
